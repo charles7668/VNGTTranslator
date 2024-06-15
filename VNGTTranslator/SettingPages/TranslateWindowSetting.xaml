@@ -1,0 +1,83 @@
+﻿<Page x:Class="VNGTTranslator.SettingPages.TranslateWindowSetting"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:hc="https://handyorg.github.io/handycontrol"
+      xmlns:settingPages="clr-namespace:VNGTTranslator.SettingPages"
+      mc:Ignorable="d"
+      d:DesignHeight="550" d:DesignWidth="800"
+      d:DataContext="{d:DesignInstance d:Type=settingPages:TranslateWindowSetting}"
+      Background="White"
+      Unloaded="TranslateWindowSetting_OnUnloaded"
+      Title="TranslateWindowSetting">
+
+    <Grid>
+        <Grid.Resources>
+            <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="FontSize" Value="20" />
+            </Style>
+            <Style TargetType="hc:ComboBox" BasedOn="{StaticResource {x:Type hc:ComboBox}}">
+                <Setter Property="FontSize" Value="20" />
+                <Setter Property="FontWeight" Value="Bold" />
+            </Style>
+        </Grid.Resources>
+        <StackPanel Grid.Row="0">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel.Resources>
+                </StackPanel.Resources>
+                <TextBlock Text="Window Color And Transparent: " VerticalAlignment="Center" />
+                <Button Name="BtnBackgroundColorSelect" Content="Select Color"
+                        Margin="10" Width="200"
+                        FontSize="15"
+                        Background="{Binding TranslateWindowColor}"
+                        Click="BtnBackgroundColorSelect_OnClick" />
+            </StackPanel>
+            <TabControl Style="{StaticResource TabControlInLine}"
+                        FontSize="15"
+                        d:SelectedIndex="0">
+                <TabControl.Resources>
+                    <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+                        <Setter Property="FontSize" Value="20" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                    </Style>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                        <Setter Property="FontSize" Value="20" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                    </Style>
+                    <Style TargetType="hc:ComboBox" BasedOn="{StaticResource {x:Type hc:ComboBox}}">
+                        <Setter Property="FontSize" Value="20" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                    </Style>
+                    <Style TargetType="hc:NumericUpDown" BasedOn="{StaticResource NumericUpDownExtend}">
+                        <Setter Property="FontSize" Value="20" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                    </Style>
+                </TabControl.Resources>
+                <TabItem Header="Source Text Font Style">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" />
+                        <TextBlock Text="Font Color" Margin="8,0,0,0" />
+                        <Button Content="Select Color"
+                                HorizontalAlignment="Left"
+                                Margin="8"
+                                Background="{Binding SourceTextColor}"
+                                Click="BtnSelectSourceTextColor_OnClick" />
+                        <hc:ComboBox hc:InfoElement.TitleWidth="140"
+                                     ItemsSource="{Binding FontList}"
+                                     SelectedItem="{Binding SelectedSourceFont }"
+                                     hc:InfoElement.TitlePlacement="Top"
+                                     hc:InfoElement.Title="Font" />
+                        <hc:NumericUpDown Minimum="8"
+                                          Value="{Binding SourceFontSize , Mode=TwoWay}"
+                                          hc:InfoElement.Title="Font Size" />
+                        <CheckBox Content="Enable Text Shadow"
+                                  IsChecked="{Binding IsSourceTextShadowEnabled}"
+                                  Margin="10"
+                                  HorizontalAlignment="Left" />
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
+        </StackPanel>
+    </Grid>
+</Page>

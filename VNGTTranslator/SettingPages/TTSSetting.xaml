@@ -1,0 +1,66 @@
+﻿<Page x:Class="VNGTTranslator.SettingPages.TTSSetting"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:hc="https://handyorg.github.io/handycontrol"
+      xmlns:settingPages="clr-namespace:VNGTTranslator.SettingPages"
+      mc:Ignorable="d"
+      d:DataContext="{d:DesignInstance settingPages:TTSSetting}"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Background="White"
+      Title="TTSSetting" Unloaded="TTSSetting_OnUnloaded">
+    <StackPanel>
+        <ItemsControl ItemsSource="{Binding TTSProviders}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderThickness="2">
+                        <RadioButton IsChecked="{Binding IsChecked}"
+                                     Checked="TTSProviderCheck_OnChecked"
+                                     Content="{Binding ProviderName}"
+                                     GroupName="TTSProviderGroup"
+                                     FontSize="15" FontWeight="Bold" />
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+        <Separator />
+        <hc:ComboBox hc:InfoElement.TitlePlacement="Left"
+                     ItemsSource="{Binding ProviderVoices}"
+                     SelectedItem="{Binding SelectedVoice}"
+                     FontSize="15"
+                     FontWeight="Bold"
+                     HorizontalAlignment="Left"
+                     Width="500"
+                     hc:InfoElement.Title="Select Voice" />
+        <Border BorderThickness="0" Margin="0,5,0,5" />
+        <hc:NumericUpDown Style="{StaticResource NumericUpDownExtend}"
+                          FontSize="15"
+                          FontWeight="Bold"
+                          HorizontalAlignment="Left"
+                          MaxWidth="300"
+                          Value="{Binding Speed , Mode=OneWay}"
+                          ValueChanged="NudSpeed_OnValueChanged"
+                          Minimum="-10"
+                          Maximum="10"
+                          hc:TitleElement.Title="Speed(-10 ~ 10)"
+                          hc:TitleElement.TitlePlacement="Left" />
+        <Border BorderThickness="0" Margin="0,5,0,5" />
+        <hc:NumericUpDown Style="{StaticResource NumericUpDownExtend}"
+                          FontSize="15"
+                          FontWeight="Bold"
+                          HorizontalAlignment="Left"
+                          MaxWidth="300"
+                          Minimum="0"
+                          Maximum="100"
+                          Value="{Binding Volume , Mode=OneWay}"
+                          ValueChanged="NudVolume_OnValueChanged"
+                          hc:TitleElement.Title="Volume (0 ~ 100)"
+                          hc:TitleElement.TitlePlacement="Left" />
+    </StackPanel>
+</Page>
