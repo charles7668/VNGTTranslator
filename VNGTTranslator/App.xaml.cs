@@ -13,48 +13,6 @@ namespace VNGTTranslator
     {
         private IHooker _hooker = null!;
 
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            Program.InitServices();
-
-            ConfigHelper.Instance.SetLang("en");
-
-            base.OnStartup(e);
-
-            string[] commandLineArgs = Environment.GetCommandLineArgs();
-            if (commandLineArgs.Length < 2 || !uint.TryParse(commandLineArgs[1], out uint pid))
-            {
-                MessageBox.Show("Please provide process pid", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-                Shutdown(-1);
-                return;
-            }
-
-            Program.PID = pid;
-
-            _hooker = Program.ServiceProvider.GetRequiredService<IHooker>();
-            _hooker.Start();
-            try
-            {
-                _hooker.Detach(pid);
-            }
-            catch (Exception)
-            {
-                // ignore
-            }
-
-            try
-            {
-                _hooker.Inject(pid, LunaDll.LunaHookDllPath);
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show($"Inject failed : {exc.Message}", "Error",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-                Shutdown(-1);
-            }
-        }
-
         protected override void OnExit(ExitEventArgs e)
         {
             try
@@ -67,6 +25,45 @@ namespace VNGTTranslator
             }
 
             base.OnExit(e);
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            Program.InitServices();
+
+            ConfigHelper.Instance.SetLang("en");
+
+            base.OnStartup(e);
+
+            Program.PID = 0;
+            string[] commandLineArgs = Environment.GetCommandLineArgs();
+            if (commandLineArgs.Length >= 2)
+            {
+                if (uint.TryParse(commandLineArgs[1], out uint pid))
+                    Program.PID = pid;
+                else
+                {
+                    MessageBox.Show("Invalid PID arg", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Shutdown(-1);
+                    return;
+                }
+            }
+
+            _hooker = Program.ServiceProvider.GetRequiredService<IHooker>();
+            _hooker.Start();
+
+            if (Program.PID == 0)
+                return;
+            try
+            {
+                _hooker.Inject(Program.PID, LunaDll.LunaHookDllPath);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show($"Inject failed : {exc.Message}", "Error",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                Shutdown(-1);
+            }
         }
     }
 }
