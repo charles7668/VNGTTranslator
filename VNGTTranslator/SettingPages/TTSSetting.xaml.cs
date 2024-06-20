@@ -120,9 +120,9 @@ namespace VNGTTranslator.SettingPages
             OnPropertyChanged(propertyName);
         }
 
-        private void TTSSetting_OnUnloaded(object sender, RoutedEventArgs e)
+        private async void TTSSetting_OnUnloaded(object sender, RoutedEventArgs e)
         {
-            _previousSelectedProvider.Provider.StoreSettingsAsync().Wait();
+            await _previousSelectedProvider.Provider.StoreSettingsAsync();
             _appConfigProvider.TrySaveAppConfig();
         }
 

@@ -18,9 +18,18 @@ namespace VNGTTranslator.Configs
         {
             if (!string.IsNullOrEmpty(appConfigPath))
             {
-                string jsonString = File.ReadAllText(appConfigPath);
-                AppConfig? config = JsonSerializer.Deserialize<AppConfig>(jsonString);
-                _appConfig = config ?? throw new JsonException("Invalid app config file");
+                Directory.CreateDirectory(Path.GetDirectoryName(appConfigPath)!);
+                if (File.Exists(appConfigPath))
+                {
+                    string jsonString = File.ReadAllText(appConfigPath);
+                    AppConfig? config = JsonSerializer.Deserialize<AppConfig>(jsonString);
+                    _appConfig = config ?? throw new JsonException("Invalid app config file");
+                }
+                else
+                {
+                    _appConfig = new AppConfig();
+                }
+
                 _translateProviderConfigCache = new MemoryCache(new MemoryCacheOptions
                 {
                     SizeLimit = 20
@@ -67,14 +76,18 @@ namespace VNGTTranslator.Configs
             string? configFolder = Path.GetDirectoryName(_appConfigPath);
             if (configFolder == null)
                 return new Dictionary<string, object>();
-            string configFile = Path.Combine(configFolder, "translator", $"{providerName}.json");
+            configFolder = Path.Combine(configFolder, "translator");
+            string configFile = Path.Combine(configFolder, $"{providerName}.json");
             if (!File.Exists(configFile))
                 return new Dictionary<string, object>();
             string jsonString = File.ReadAllText(configFile);
             config = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonString);
             if (config == null)
                 return new Dictionary<string, object>();
-            _translateProviderConfigCache.Set(providerName, config);
+            _translateProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions()
+            {
+                Size = 1
+            });
             return config;
         }
 
@@ -83,17 +96,24 @@ namespace VNGTTranslator.Configs
         {
             if (string.IsNullOrEmpty(_appConfigPath))
             {
-                _translateProviderConfigCache.Set(providerName, config);
+                _translateProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions()
+                {
+                    Size = 1
+                });
             }
             else
             {
                 try
                 {
-                    string configFolder = Path.GetDirectoryName(_appConfigPath)!;
-                    string configFile = Path.Combine(configFolder, "translator", $"{providerName}.json");
+                    string configFolder = Path.Combine(Path.GetDirectoryName(_appConfigPath)!, "translator");
+                    Directory.CreateDirectory(configFolder);
+                    string configFile = Path.Combine(configFolder, $"{providerName}.json");
                     string writeString = JsonSerializer.Serialize(config);
                     await File.WriteAllTextAsync(configFile, writeString);
-                    _translateProviderConfigCache.Set(providerName, config);
+                    _translateProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions()
+                    {
+                        Size = 1
+                    });
                 }
                 catch (Exception e)
                 {
@@ -110,7 +130,7 @@ namespace VNGTTranslator.Configs
             if (_ttsProviderConfigCache.TryGetValue(providerName,
                     out (TTSCommonSetting, Dictionary<string, object>) config))
             {
-                return config!;
+                return config;
             }
 
             if (string.IsNullOrEmpty(_appConfigPath))
@@ -130,7 +150,10 @@ namespace VNGTTranslator.Configs
                 return (new TTSCommonSetting(), new Dictionary<string, object>());
             config = (deserialize[0].Deserialize<TTSCommonSetting>() ?? new TTSCommonSetting(),
                 deserialize[1].Deserialize<Dictionary<string, object>>() ?? []);
-            _ttsProviderConfigCache.Set(providerName, config);
+            _ttsProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions()
+            {
+                Size = 1
+            });
             return config;
         }
 
@@ -141,14 +164,19 @@ namespace VNGTTranslator.Configs
                 otherSettings ?? []);
             if (string.IsNullOrEmpty(_appConfigPath))
             {
-                _ttsProviderConfigCache.Set(providerName, config);
+                _ttsProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions()
+                {
+                    Size = 1
+                });
             }
             else
             {
                 try
                 {
                     string configFolder = Path.GetDirectoryName(_appConfigPath)!;
-                    string configFile = Path.Combine(configFolder, "tts", $"{providerName}.json");
+                    configFolder = Path.Combine(configFolder, "tts");
+                    Directory.CreateDirectory(configFolder);
+                    string configFile = Path.Combine(configFolder, $"{providerName}.json");
                     var jArray = new JsonArray
                     {
                         config.commonSetting,
@@ -156,7 +184,10 @@ namespace VNGTTranslator.Configs
                     };
                     string writeString = JsonSerializer.Serialize(jArray);
                     await File.WriteAllTextAsync(configFile, writeString);
-                    _ttsProviderConfigCache.Set(providerName, config);
+                    _ttsProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions()
+                    {
+                        Size = 1
+                    });
                 }
                 catch (Exception e)
                 {

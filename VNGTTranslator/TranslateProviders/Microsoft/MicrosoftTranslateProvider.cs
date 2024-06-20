@@ -41,7 +41,7 @@ namespace VNGTTranslator.TranslateProviders.Microsoft
         public async Task<string> TranslateAsync(string text, LanguageConstant.Language sourceLanguage,
             LanguageConstant.Language targetLanguage)
         {
-            bool isProxyUse = !_setting.TryGetValue(IS_USE_PROXY_SETTING_STRING, out object? obj) || (bool)obj;
+            bool isProxyUse = GetIsUseProxyFromSetting();
             HttpClient? httpClient = isProxyUse ? _networkService.ProxyHttpClient : _networkService.DefaultHttpClient;
             if (httpClient == null)
             {
@@ -90,7 +90,7 @@ namespace VNGTTranslator.TranslateProviders.Microsoft
 
         public PopupWindow GetSettingWindow(Window parent)
         {
-            bool isProxyUse = !_setting.TryGetValue(IS_USE_PROXY_SETTING_STRING, out object? obj) || (bool)obj;
+            bool isProxyUse = GetIsUseProxyFromSetting();
             BaseSettingPage.SettingParams settingParams = new()
             {
                 IsUseProxy = isProxyUse
@@ -107,12 +107,17 @@ namespace VNGTTranslator.TranslateProviders.Microsoft
                 Title = ProviderName,
                 Owner = parent
             };
-            window.Closing += (_, _) =>
+            window.Closing += async (_, _) =>
             {
+                bool hasChange = false;
                 if (settingParams.IsUseProxy != isProxyUse)
                 {
                     _setting["IsProxyUse"] = settingParams.IsUseProxy;
+                    hasChange = true;
                 }
+
+                if (hasChange)
+                    await StoreSettingsAsync();
             };
             return window;
         }
@@ -120,6 +125,20 @@ namespace VNGTTranslator.TranslateProviders.Microsoft
         public Task<Result> StoreSettingsAsync()
         {
             return _appConfigProvider.SaveTranslatorProviderConfigAsync(ProviderName, _setting);
+        }
+
+        private bool GetIsUseProxyFromSetting()
+        {
+            bool isProxyUse = true;
+            if (_setting.TryGetValue(IS_USE_PROXY_SETTING_STRING, out object? obj))
+            {
+                if (bool.TryParse(obj.ToString(), out bool parsed))
+                {
+                    isProxyUse = parsed;
+                }
+            }
+
+            return isProxyUse;
         }
 
         private string GetSignature(string requestUrl, byte[] privateKey)
