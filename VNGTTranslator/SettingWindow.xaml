@@ -7,6 +7,7 @@
         xmlns:vngtTranslator="clr-namespace:VNGTTranslator"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vngtTranslator:SettingWindow}"
+        Icon="pack://application:,,,/VNGTTranslator;component/Resources/app.ico"
         Title="SettingWindow" Height="650" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
