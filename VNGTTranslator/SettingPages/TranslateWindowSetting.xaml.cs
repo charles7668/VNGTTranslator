@@ -7,7 +7,6 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
 using VNGTTranslator.Configs;
-using Color = System.Windows.Media.Color;
 using FontFamily = System.Drawing.FontFamily;
 using Window = System.Windows.Window;
 
@@ -101,12 +100,12 @@ namespace VNGTTranslator.SettingPages
             private init => SetField(ref _fontList, value);
         }
 
-        public Color TranslateWindowColor
+        public Brush TranslateWindowColor
         {
-            get => _appConfig.TranslateWindowColor;
+            get => new SolidColorBrush(_appConfig.TranslateWindowColor);
             private set
             {
-                _appConfig.TranslateWindowColor = value;
+                _appConfig.TranslateWindowColor = ((SolidColorBrush)value).Color;
                 OnPropertyChanged();
             }
         }
@@ -129,7 +128,7 @@ namespace VNGTTranslator.SettingPages
             };
             picker.Confirmed += (_, args) =>
             {
-                TranslateWindowColor = args.Info;
+                TranslateWindowColor = new SolidColorBrush(args.Info);
                 window.Close();
             };
 
@@ -139,19 +138,6 @@ namespace VNGTTranslator.SettingPages
             };
 
             window.Show();
-        }
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        private void SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value))
-                return;
-            field = value;
-            OnPropertyChanged(propertyName);
         }
 
         private void BtnSelectSourceTextColor_OnClick(object sender, RoutedEventArgs e)
@@ -180,6 +166,19 @@ namespace VNGTTranslator.SettingPages
             };
 
             window.Show();
+        }
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value))
+                return;
+            field = value;
+            OnPropertyChanged(propertyName);
         }
 
         private void TranslateWindowSetting_OnUnloaded(object sender, RoutedEventArgs e)

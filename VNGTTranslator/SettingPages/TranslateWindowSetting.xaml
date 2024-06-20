@@ -27,7 +27,7 @@
                 <StackPanel.Resources>
                 </StackPanel.Resources>
                 <TextBlock Text="Window Color And Transparent: " VerticalAlignment="Center" />
-                <Button Name="BtnBackgroundColorSelect" Content="Select Color"
+                <Button Content="Select Color"
                         Margin="10" Width="200"
                         FontSize="15"
                         Background="{Binding TranslateWindowColor}"
