@@ -66,7 +66,7 @@ namespace VNGTTranslator
         private FontFamily _sourceFontFamily = new("Arial");
 
         private uint _sourceFontSize = 15;
-        private string _sourceText = "Wait source text";
+        private string _sourceText = "Please Select Hook Item First";
         private Color _sourceTextColor = Colors.White;
 
         private Effect? _sourceTextEffect;
@@ -222,7 +222,11 @@ namespace VNGTTranslator
         private void BtnSelectHookCode_OnClick(object sender, RoutedEventArgs e)
         {
             HookSelectWindow hookSelectWindow = new();
-            hookSelectWindow.Show();
+            _hooker.OnHookTextReceived -= OnHookerTextReceived;
+            hookSelectWindow.ShowDialog();
+            if (Program.SelectedHookItem != null)
+                SourceText = "Waiting for text...";
+            _hooker.OnHookTextReceived += OnHookerTextReceived;
         }
 
         private void BtnSelectProcess_OnClick(object sender, RoutedEventArgs e)
