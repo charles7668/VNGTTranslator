@@ -4,7 +4,7 @@
     /// Result class for handling detail return value
     /// </summary>
     /// <typeparam name="T">Type of value</typeparam>
-    internal class Result<T>
+    public class Result<T>
     {
         private Result(T? value, bool isSuccess, string errorMessage)
         {

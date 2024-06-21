@@ -26,7 +26,7 @@ namespace VNGTTranslator.SettingPages
                 ? providers.Select(p => new TTSProviderDataContext(p)).ToList()
                 : [];
             TTSProviderDataContext? defaultProvider =
-                TTSProviders.FirstOrDefault(x => x.ProviderName == _appConfig.TTSProvider) ??
+                TTSProviders.FirstOrDefault(x => x.ProviderName == _appConfig.UseTTSProvider) ??
                 TTSProviders.FirstOrDefault(x => x.ProviderName == factory.GetProvider(x.ProviderName)?.ProviderName) ??
                 TTSProviders.FirstOrDefault();
             if (defaultProvider != null)
@@ -104,7 +104,7 @@ namespace VNGTTranslator.SettingPages
             ProviderVoices = providerDataContext.ProviderVoices;
             SelectedVoice = providerDataContext.Provider.SelectedVoice;
             _previousSelectedProvider = providerDataContext;
-            _appConfig.TTSProvider = providerDataContext.ProviderName;
+            _appConfig.UseTTSProvider = providerDataContext.ProviderName;
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)

@@ -1,6 +1,7 @@
 ﻿using HandyControl.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel;
+using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
@@ -9,10 +10,16 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using VNGTTranslator.Configs;
+using VNGTTranslator.Enums;
+using VNGTTranslator.Helper;
 using VNGTTranslator.Hooker;
 using VNGTTranslator.Models;
+using VNGTTranslator.OCRProviders;
 using VNGTTranslator.TranslateProviders;
 using VNGTTranslator.TTSProviders;
+using Brush = System.Windows.Media.Brush;
+using Color = System.Windows.Media.Color;
+using FontFamily = System.Windows.Media.FontFamily;
 using MessageBox = System.Windows.MessageBox;
 using TextBox = HandyControl.Controls.TextBox;
 
@@ -31,6 +38,7 @@ namespace VNGTTranslator
             _hooker.OnHookTextReceived += OnHookerTextReceived;
             _appConfig = Program.ServiceProvider.GetRequiredService<IAppConfigProvider>().GetAppConfig();
             _ttsProviderFactory = Program.ServiceProvider.GetRequiredService<TTSProviderFactory>();
+            _ocrProviderFactory = Program.ServiceProvider.GetRequiredService<OCRProviderFactory>();
             UpdateTTSProvider();
             _translateTimeoutTimer = new Timer(TranslateTimerCallback, null, Timeout.Infinite, Timeout.Infinite);
 
@@ -52,6 +60,8 @@ namespace VNGTTranslator
 
         private readonly IHooker _hooker;
 
+        private readonly OCRProviderFactory _ocrProviderFactory;
+
         private readonly Timer _translateTimeoutTimer;
 
         private readonly TTSProviderFactory _ttsProviderFactory;
@@ -59,6 +69,8 @@ namespace VNGTTranslator
         private bool _isShowSourceText = true;
 
         private bool _isTransparent;
+
+        private Timer? _ocrRefreshTimer;
         private bool _pauseState;
 
         private DateTime _previousTranslateTime = new(2000, 01, 01);
@@ -74,6 +86,8 @@ namespace VNGTTranslator
         private ITTSProvider? _ttsProvider;
 
         private List<TranslateProviderDataContext> _useTranslateProviderDataContexts = [];
+
+        public bool IsHookMode => Program.Mode == Mode.HOOK_MODE;
 
         public Effect? SourceTextEffect
         {
@@ -192,11 +206,14 @@ namespace VNGTTranslator
             if (!PauseState)
             {
                 _hooker.OnHookTextReceived -= OnHookerTextReceived;
+                _ocrRefreshTimer?.Change(Timeout.Infinite, Timeout.Infinite);
                 PauseState = true;
             }
             else
             {
                 _hooker.OnHookTextReceived += OnHookerTextReceived;
+                _ocrRefreshTimer?.Change(0,
+                    Math.Max(TimeSpan.FromMilliseconds(100).Milliseconds, _appConfig.TranslateInterval));
                 PauseState = false;
             }
         }
@@ -237,8 +254,24 @@ namespace VNGTTranslator
                 WindowStartupLocation = WindowStartupLocation.CenterOwner
             };
             _hooker.OnHookTextReceived -= OnHookerTextReceived;
+            Mode recordMode = Program.Mode;
             processSelectWindow.ShowDialog();
             _hooker.OnHookTextReceived += OnHookerTextReceived;
+            if (recordMode != Program.Mode)
+            {
+                OnPropertyChanged(nameof(IsHookMode));
+            }
+
+            if (!IsHookMode)
+            {
+                _ocrRefreshTimer ??= new Timer(OCRRefreshTimerCallback, null, 0,
+                    Math.Max(TimeSpan.FromMilliseconds(100).Milliseconds, _appConfig.TranslateInterval));
+            }
+            else
+            {
+                _ocrRefreshTimer?.Dispose();
+                _ocrRefreshTimer = null;
+            }
         }
 
         private void BtnSetting_OnClick(object sender, RoutedEventArgs e)
@@ -264,6 +297,46 @@ namespace VNGTTranslator
             Topmost = !Topmost;
         }
 
+        private async void OCRRefreshTimerCallback(object? state)
+        {
+            OCRSetting ocrSetting = Program.OCRSetting;
+            var rectangle = new Rectangle(0, 0, 0, 0);
+            if (ocrSetting.OCRArea != null)
+                rectangle = ocrSetting.OCRArea.Value;
+
+            Bitmap? image = ImageHelper.GetWindowRectCapture(ocrSetting.WinHandle, rectangle, ocrSetting.IsUseScreen);
+            if (image == null)
+            {
+                SourceText = "Can't capture image";
+                return;
+            }
+
+            IOCRProvider? ocrProvider = _ocrProviderFactory.GetProvider(_appConfig.UseOCRProvider);
+            if (ocrProvider == null)
+            {
+                SourceText = "No OCR can use";
+                return;
+            }
+
+            Result setLanguageResult = ocrProvider.SetOcrLanguage(Program.OCRSetting.OCRLang);
+            if (!setLanguageResult)
+            {
+                SourceText = setLanguageResult.ErrorMessage;
+                return;
+            }
+
+            Result<string> recognizeTextResult =
+                await ocrProvider.RecognizeTextAsync(image, Program.OCRSetting.PreProcessFunc);
+            if (!recognizeTextResult)
+            {
+                SourceText = recognizeTextResult.ErrorMessage;
+                return;
+            }
+
+            SourceText = recognizeTextResult.Value ?? "";
+            await TranslateAsync();
+        }
+
         protected override void OnClosing(CancelEventArgs e)
         {
             if (!PauseState)
@@ -273,6 +346,8 @@ namespace VNGTTranslator
 
         private async Task OnHookerTextReceived(HookTextReceivedEventArgs e)
         {
+            if (!IsHookMode)
+                return;
             var data = new ReceivedHookData
             {
                 Ctx = e.Ctx,
@@ -373,10 +448,10 @@ namespace VNGTTranslator
                 : new SolidColorBrush(_appConfig.TranslateWindowColor);
         }
 
-        private void TranslateTimerCallback(object? state)
+        private async Task TranslateAsync()
         {
             _history.AppendLine(SourceText);
-            Task.WaitAll(UseTranslateProviderDataContexts.Select(context =>
+            await Task.WhenAll(UseTranslateProviderDataContexts.Select(context =>
                 context.Translate(SourceText)).ToArray());
             Application.Current.Dispatcher.BeginInvoke(() =>
             {
@@ -391,9 +466,14 @@ namespace VNGTTranslator
             _history.AppendLine("----------------------"); // line separator
         }
 
+        private async void TranslateTimerCallback(object? state)
+        {
+            await TranslateAsync();
+        }
+
         private void UpdateTTSProvider()
         {
-            ITTSProvider? provider = _ttsProviderFactory.GetProvider(_appConfig.TTSProvider ?? "")
+            ITTSProvider? provider = _ttsProviderFactory.GetProvider(_appConfig.UseTTSProvider ?? "")
                                      ?? _ttsProviderFactory.GetProvider("WindowsTTS");
             _ttsProvider = provider;
         }

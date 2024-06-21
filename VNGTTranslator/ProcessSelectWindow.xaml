@@ -5,21 +5,90 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:vngtTranslator="clr-namespace:VNGTTranslator"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        xmlns:converters="clr-namespace:VNGTTranslator.Converters"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vngtTranslator:ProcessSelectWindow}"
-        Title="Process Selection Window" Height="200" Width="800">
+        Title="Process Selection Window" Height="600" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="70" />
         </Grid.RowDefinitions>
         <StackPanel>
-            <hc:ComboBox Style="{StaticResource ComboBoxExtend}"
-                         ItemsSource="{Binding ProcessList}"
-                         SelectedItem="{Binding SelectedProcess , Mode=TwoWay}"
-                         hc:InfoElement.Title="Choose Game Process"
-                         hc:TitleElement.TitlePlacement="Top"
-                         VerticalAlignment="Center" />
+            <hc:TabControl Background="Blue" SelectedIndex="{Binding SelectedMode}" IsTabFillEnabled="True">
+                <hc:TabItem FontSize="20" Header="Hook Mode" Background="Lime">
+                    <StackPanel Background="White">
+                        <hc:ComboBox Style="{StaticResource ComboBoxExtend}"
+                                     ItemsSource="{Binding ProcessList}"
+                                     SelectedItem="{Binding SelectedProcess , Mode=TwoWay}"
+                                     hc:InfoElement.Title="Choose Game Process"
+                                     hc:TitleElement.TitlePlacement="Top"
+                                     FontSize="15"
+                                     VerticalAlignment="Center" />
+                    </StackPanel>
+                </hc:TabItem>
+                <hc:TabItem FontSize="20" Header="OCR Mode" Background="Lime">
+                    <StackPanel Background="White">
+                        <StackPanel.Resources>
+                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="Margin" Value="5" />
+                                <Setter Property="Height" Value="Auto" />
+                                <Setter Property="FontSize" Value="20" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                            <converters:LanguageStringConverter x:Key="LanguageStringConverter" />
+                            <converters:ImagePreProcessFuncToStringConverter
+                                x:Key="ImagePreProcessFuncToStringConverter" />
+                        </StackPanel.Resources>
+                        <CheckBox IsChecked="{Binding IsUseScreen}"
+                                  Margin="5"
+                                  FontSize="20" FontWeight="Bold" Content="Use Screen" />
+                        <Button Name="BtnDragToTarget"
+                                PreviewMouseDown="BtnDragToTarget_OnMouseDown"
+                                PreviewMouseUp="BtnDragToTarget_OnMouseUp">
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                    <Setter Property="IsEnabled" Value="True" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsUseScreen}" Value="True">
+                                            <Setter Property="IsEnabled" Value="False" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <Button.Content>
+                                <hc:SimpleStackPanel Orientation="Horizontal">
+                                    <fa:IconBlock Icon="Plus" FontSize="20" />
+                                    <TextBlock Text="Drag to target window" FontWeight="Bold" FontSize="20"
+                                               VerticalAlignment="Center" />
+                                </hc:SimpleStackPanel>
+                            </Button.Content>
+                        </Button>
+                        <TextBlock Margin="5" VerticalAlignment="Center"
+                                   d:Text="Target : Test"
+                                   Text="{Binding DisplayCurrentOcrTarget}" />
+                        <hc:SimpleStackPanel Orientation="Horizontal">
+                            <Button Content="Select Region" Click="BtnSelectRegion_OnClick" />
+                            <Button Content="Refresh Region" Click="BtnRefresh_OnClick" />
+                        </hc:SimpleStackPanel>
+                        <Image Height="200" Source="{Binding PreviewImage}" />
+                        <hc:SimpleStackPanel Orientation="Horizontal" Margin="0,5,0,5">
+                            <hc:ComboBox hc:TitleElement.TitlePlacement="Left"
+                                         hc:TitleElement.Title="Language"
+                                         ItemsSource="{Binding OCRLangList , Converter={StaticResource LanguageStringConverter}}"
+                                         SelectedItem="{Binding SelectedOCRLanguage , Converter={StaticResource LanguageStringConverter}}" />
+                            <hc:ComboBox hc:TitleElement.TitlePlacement="Left"
+                                         hc:TitleElement.Title="PreProcess"
+                                         ItemsSource="{Binding PreProcessFuncList , Converter={StaticResource ImagePreProcessFuncToStringConverter}}"
+                                         SelectedItem="{Binding SelectedPreProcessFunc , Converter={StaticResource ImagePreProcessFuncToStringConverter}}" />
+                            <Button Content="Test OCR" Click="BtnTestOCR_OnClick" />
+                        </hc:SimpleStackPanel>
+                    </StackPanel>
+                </hc:TabItem>
+            </hc:TabControl>
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Save" Click="BtnSave_OnClick">

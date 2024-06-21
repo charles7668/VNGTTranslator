@@ -2,12 +2,14 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.22621.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <UseWin32>true</UseWin32>
     <Platforms>AnyCPU;x64</Platforms>
     <ApplicationIcon>Resources\app.ico</ApplicationIcon>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,6 +31,11 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
     <PackageReference Include="System.ComponentModel.Composition" Version="8.0.0" />
     <PackageReference Include="System.Speech" Version="8.0.0" />
+    <FrameworkReference Include="Microsoft.Windows.SDK.NET.Ref" Version="10.0.22621.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Win32ApiLibrary\Win32ApiLibrary.csproj" />
   </ItemGroup>
 
   <ItemGroup>

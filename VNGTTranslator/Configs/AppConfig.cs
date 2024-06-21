@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using ABI.Windows.Devices.Input;
+using System.Windows.Media;
 using VNGTTranslator.Models;
 using VNGTTranslator.TranslateProviders;
 
@@ -26,7 +27,8 @@ namespace VNGTTranslator.Configs
         public bool IsUseSystemProxy { get; set; } = true;
         public string ProxyAddress { get; set; } = "";
         public string ProxyPort { get; set; } = "";
-        public string? TTSProvider { get; set; }
+        public string? UseTTSProvider { get; set; }
+        public string UseOCRProvider { get; set; } = "WindowOCR";
 
         public AppConfig Clone()
         {
@@ -41,7 +43,8 @@ namespace VNGTTranslator.Configs
                 IsUseSystemProxy = IsUseSystemProxy,
                 ProxyAddress = ProxyAddress,
                 ProxyPort = ProxyPort,
-                TTSProvider = TTSProvider
+                UseTTSProvider = UseTTSProvider,
+                UseOCRProvider = UseOCRProvider
             };
         }
 
@@ -57,7 +60,8 @@ namespace VNGTTranslator.Configs
             IsUseSystemProxy = appConfig.IsUseSystemProxy;
             ProxyAddress = appConfig.ProxyAddress;
             ProxyPort = appConfig.ProxyPort;
-            TTSProvider = appConfig.TTSProvider;
+            UseTTSProvider = appConfig.UseTTSProvider;
+            UseOCRProvider = appConfig.UseOCRProvider;
         }
     }
 }

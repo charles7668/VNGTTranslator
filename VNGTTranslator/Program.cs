@@ -1,8 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.IO;
 using VNGTTranslator.Configs;
+using VNGTTranslator.Enums;
 using VNGTTranslator.Hooker;
+using VNGTTranslator.Models;
 using VNGTTranslator.Network;
+using VNGTTranslator.OCRProviders;
 using VNGTTranslator.TranslateProviders;
 using VNGTTranslator.TTSProviders;
 
@@ -11,6 +14,10 @@ namespace VNGTTranslator
     public static class Program
     {
         public static uint PID { get; set; }
+
+        public static Mode Mode { get; set; } = Mode.HOOK_MODE;
+
+        public static OCRSetting OCRSetting { get; set; } = new();
 
         public static ReceivedHookData? SelectedHookItem { get; set; }
 
@@ -35,6 +42,7 @@ namespace VNGTTranslator
             services.AddSingleton<TranslateProviderFactory, TranslateProviderFactory>();
             services.AddSingleton<INetworkService, NetworkService>();
             services.AddSingleton<TTSProviderFactory, TTSProviderFactory>();
+            services.AddSingleton<OCRProviderFactory, OCRProviderFactory>();
             ServiceProvider = services.BuildServiceProvider();
         }
     }

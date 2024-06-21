@@ -1,0 +1,29 @@
+﻿<Window x:Class="VNGTTranslator.ScreenCaptureWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VNGTTranslator"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance local:ScreenCaptureWindow}"
+        Title="ScreenCaptureWindow" Height="450" Width="800"
+        Topmost="True" WindowStyle="None" ResizeMode="NoResize">
+    <Grid>
+        <Image Name="ImgMeasure" HorizontalAlignment="Center" Stretch="Uniform" Source="{Binding Image}" />
+        <InkCanvas Name="InkCanvasMeasure"
+                   DefaultDrawingAttributes="{Binding InkDrawingAttributes}"
+                   EditingMode="None" Background="Transparent"
+                   Strokes="{Binding InkStrokes, Mode=TwoWay}" HorizontalAlignment="Center"
+                   Width="{Binding ElementName=ImgMeasure, Path=ActualWidth}"
+                   Height="{Binding ElementName=ImgMeasure, Path=ActualHeight}"
+                   MouseDown="InkCanvasMeasure_OnMouseDown"
+                   MouseMove="InkCanvasMeasure_OnMouseMove">
+            <Label Content="{Binding Info}"
+                   Height="Auto"
+                   Background="Transparent" HorizontalAlignment="Left"
+                   VerticalAlignment="Top" Margin="10"
+                   FontSize="18" Foreground="Red" IsHitTestVisible="False" />
+        </InkCanvas>
+
+    </Grid>
+</Window>
