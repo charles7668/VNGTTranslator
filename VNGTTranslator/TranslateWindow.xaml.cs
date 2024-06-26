@@ -20,6 +20,7 @@ using VNGTTranslator.TTSProviders;
 using Brush = System.Windows.Media.Brush;
 using Color = System.Windows.Media.Color;
 using FontFamily = System.Windows.Media.FontFamily;
+using Localization = VNGTTranslator.Properties.Localization;
 using MessageBox = System.Windows.MessageBox;
 using TextBox = HandyControl.Controls.TextBox;
 
@@ -78,7 +79,7 @@ namespace VNGTTranslator
         private FontFamily _sourceFontFamily = new("Arial");
 
         private uint _sourceFontSize = 15;
-        private string _sourceText = "Please Select Hook Item First";
+        private string _sourceText = Localization.TranslateWindow_Text_PleaseSelectHookItem;
         private Color _sourceTextColor = Colors.White;
 
         private Effect? _sourceTextEffect;
@@ -183,7 +184,7 @@ namespace VNGTTranslator
                 MinWidth = 600,
                 MinHeight = 300,
                 Owner = this,
-                Title = "History"
+                Title = Localization.HistoryWindow_Text_Title
             };
             _hooker.OnHookTextReceived -= OnHookerTextReceived;
             window.Topmost = true;
@@ -222,7 +223,7 @@ namespace VNGTTranslator
         {
             if (_ttsProvider == null)
             {
-                MessageBox.Show("No TTS Provider can use", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Localization.Error_NoTTSCanUse, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -242,7 +243,7 @@ namespace VNGTTranslator
             _hooker.OnHookTextReceived -= OnHookerTextReceived;
             hookSelectWindow.ShowDialog();
             if (Program.SelectedHookItem != null)
-                SourceText = "Waiting for text...";
+                SourceText = Localization.TranslateWindow_Text_WaitSourceText;
             _hooker.OnHookTextReceived += OnHookerTextReceived;
         }
 
@@ -307,14 +308,14 @@ namespace VNGTTranslator
             Bitmap? image = ImageHelper.GetWindowRectCapture(ocrSetting.WinHandle, rectangle, ocrSetting.IsUseScreen);
             if (image == null)
             {
-                SourceText = "Can't capture image";
+                SourceText = Localization.Error_CanNotCaptureImage;
                 return;
             }
 
             IOCRProvider? ocrProvider = _ocrProviderFactory.GetProvider(_appConfig.UseOCRProvider);
             if (ocrProvider == null)
             {
-                SourceText = "No OCR can use";
+                SourceText = Localization.Error_NoOCRCanUse;
                 return;
             }
 

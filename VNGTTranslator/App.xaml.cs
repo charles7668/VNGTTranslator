@@ -1,5 +1,6 @@
 ﻿using HandyControl.Tools;
 using Microsoft.Extensions.DependencyInjection;
+using System.Globalization;
 using System.Windows;
 using VNGTTranslator.Hooker;
 using VNGTTranslator.LunaHook;
@@ -32,6 +33,10 @@ namespace VNGTTranslator
             Program.InitServices();
 
             ConfigHelper.Instance.SetLang("en");
+
+            var culture = new CultureInfo("zh-tw");
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
 
             base.OnStartup(e);
 

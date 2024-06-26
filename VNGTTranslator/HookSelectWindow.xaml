@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:vngtTranslator="clr-namespace:VNGTTranslator"
+        xmlns:p="clr-namespace:VNGTTranslator.Properties"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vngtTranslator:HookSelectWindow}"
-        Title="HookSelectWindow" Height="450" Width="800">
+        Title="{x:Static p:Localization.HookSelectWindow_Text_Title}" Height="450" Width="800">
     <Grid>
         <Grid>
             <Grid Background="White">
@@ -17,7 +18,7 @@
                     <RowDefinition Height="40*" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Text="let the text change" Margin="10" />
+                <TextBlock Grid.Row="0" Text="{x:Static p:Localization.HookSelectWindow_Text_Hint}" Margin="10" />
 
                 <ListView Name="ListHookReceived" Grid.Row="1" Background="White"
                           ItemsSource="{Binding  HookDataList}"
@@ -48,11 +49,13 @@
 
                 <StackPanel Grid.Row="2" Orientation="Horizontal">
                     <Button HorizontalAlignment="Left" Margin="10"
-                            Content="Hook with H-code" Click="BtnAddHook_OnClick" />
+                            Content="{x:Static p:Localization.HookSelectWindow_Text_ManuallyAddHookCode}"
+                            Click="BtnAddHook_OnClick" />
                 </StackPanel>
 
                 <Button Grid.Row="2" HorizontalAlignment="Right" Margin="10"
-                        Content="Confirm" Width="205" Click="BtnConfirm_OnClick" />
+                        Content="{x:Static p:Localization.HookSelectWindow_Text_Confirm}" Width="205"
+                        Click="BtnConfirm_OnClick" />
 
             </Grid>
 
@@ -67,7 +70,9 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
 
-                        <TextBlock Grid.Row="0" Text="Please enter the Hook Code" FontSize="20"
+                        <TextBlock Grid.Row="0"
+                                   Text="{x:Static p:Localization.HookSelectWindow_Text_EnterHookCodeHint}"
+                                   FontSize="20"
                                    HorizontalAlignment="Center" VerticalAlignment="Center" />
 
                         <TextBox Name="TxtHookCode"
@@ -78,10 +83,11 @@
 
                         <Button Grid.Row="3" Style="{StaticResource ButtonInfo}" HorizontalAlignment="Left" Margin="30"
                                 VerticalAlignment="Center"
-                                Content="Confirm hook" FontSize="15"
+                                Content="{x:Static p:Localization.HookSelectWindow_Text_Confirm}" FontSize="15"
                                 Height="Auto" Click="BtnAddHookConfirmHook_OnClick" />
                         <Button Grid.Row="3" Style="{StaticResource ButtonDanger}" HorizontalAlignment="Right"
-                                Margin="30" VerticalAlignment="Center" Content="Close"
+                                Margin="30" VerticalAlignment="Center"
+                                Content="{x:Static p:Localization.HookSelectWindow_Text_Close}"
                                 FontSize="15" Height="Auto" Click="BtnAddHookClose_OnClick" />
 
                     </Grid>

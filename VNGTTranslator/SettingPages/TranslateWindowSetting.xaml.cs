@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Media;
 using VNGTTranslator.Configs;
 using FontFamily = System.Drawing.FontFamily;
+using Localization = VNGTTranslator.Properties.Localization;
 using Window = System.Windows.Window;
 
 namespace VNGTTranslator.SettingPages
@@ -123,7 +124,7 @@ namespace VNGTTranslator.SettingPages
                 WindowStyle = WindowStyle.None,
                 MinWidth = 0,
                 MinHeight = 0,
-                Title = "Select Color",
+                Title = Localization.ColorPicker_Text_Title,
                 Owner = Window.GetWindow(this)
             };
             picker.Confirmed += (_, args) =>
@@ -151,7 +152,7 @@ namespace VNGTTranslator.SettingPages
                 WindowStyle = WindowStyle.None,
                 MinWidth = 0,
                 MinHeight = 0,
-                Title = "Select Color",
+                Title = Localization.ColorPicker_Text_Title,
                 Owner = Window.GetWindow(this)
             };
             picker.Confirmed += (_, args) =>

@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:VNGTTranslator.SettingPages"
+      xmlns:p="clr-namespace:VNGTTranslator.Properties"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       d:DataContext="{d:DesignInstance local:About}"
@@ -17,20 +18,22 @@
                 <Setter Property="Margin" Value="0,10,0,10" />
             </Style>
         </StackPanel.Resources>
-        <TextBlock Text="About VNGT Translator" FontSize="25"
+        <TextBlock Text="{x:Static p:Localization.AboutPage_Text_AboutProgram}" FontSize="25"
                    HorizontalAlignment="Left" />
         <TextBlock Style="{StaticResource InfoTextBlockStyle}"
-                   d:Text="Version 1.0.0"
+                   d:Text="Version: 1.0.0"
                    Text="{Binding VersionText}" />
         <TextBlock Style="{StaticResource InfoTextBlockStyle}">
-            WebSite :
+            <TextBlock Text="{x:Static p:Localization.AboutPage_Text_WebSite}" />
+            :
             <Hyperlink RequestNavigate="Hyperlink_OnRequestNavigate"
                        NavigateUri="https://github.com/charles7668/VNGTTranslator">
                 Github
             </Hyperlink>
         </TextBlock>
         <TextBlock Style="{StaticResource InfoTextBlockStyle}">
-            Feature Request or Issue :
+            <TextBlock Text="{x:Static p:Localization.AboutPage_Text_FeatureAndIssue}" />
+            :
             <Hyperlink RequestNavigate="Hyperlink_OnRequestNavigate"
                        NavigateUri="https://github.com/charles7668/VNGTTranslator/issues">
                 Click Here

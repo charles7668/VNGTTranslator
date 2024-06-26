@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Threading;
 using VNGTTranslator.Hooker;
+using Localization = VNGTTranslator.Properties.Localization;
 
 namespace VNGTTranslator
 {
@@ -57,7 +58,7 @@ namespace VNGTTranslator
         {
             if (!_hooker.InsertHook(Program.PID, AddHookCodeInput))
             {
-                MessageBox.Show("insert hook code failed");
+                MessageBox.Show(Localization.Error_InsertHookCodeFailed);
                 return;
             }
 

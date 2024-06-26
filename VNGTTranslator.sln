@@ -5,7 +5,7 @@ VisualStudioVersion = 17.10.35004.147
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VNGTTranslator", "VNGTTranslator\VNGTTranslator.csproj", "{F85A479F-C989-4887-8F30-0C0E41C0260C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Win32ApiLibrary", "Win32ApiLibrary\Win32ApiLibrary.csproj", "{0291203D-A1FE-411E-AF61-A5CD1C80F754}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Win32ApiLibrary", "Win32ApiLibrary\Win32ApiLibrary.csproj", "{0291203D-A1FE-411E-AF61-A5CD1C80F754}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +26,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
+		RESX_SortFileContentOnSave = True
 		SolutionGuid = {02AC867F-ED1A-4BF8-8E16-097C23BD2FAF}
 	EndGlobalSection
 EndGlobal

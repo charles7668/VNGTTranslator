@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:hc="https://handyorg.github.io/handycontrol"
       xmlns:settingPages="clr-namespace:VNGTTranslator.SettingPages"
+      xmlns:p="clr-namespace:VNGTTranslator.Properties"
       mc:Ignorable="d"
       d:DataContext="{d:DesignInstance settingPages:TTSSetting}"
       d:DesignHeight="450" d:DesignWidth="800"
@@ -37,7 +38,7 @@
                      FontWeight="Bold"
                      HorizontalAlignment="Left"
                      Width="500"
-                     hc:InfoElement.Title="Select Voice" />
+                     hc:InfoElement.Title="{x:Static p:Localization.TTSSettingPage_Text_SelectVoice}" />
         <Border BorderThickness="0" Margin="0,5,0,5" />
         <hc:NumericUpDown Style="{StaticResource NumericUpDownExtend}"
                           FontSize="15"
@@ -48,7 +49,7 @@
                           ValueChanged="NudSpeed_OnValueChanged"
                           Minimum="-10"
                           Maximum="10"
-                          hc:TitleElement.Title="Speed(-10 ~ 10)"
+                          hc:TitleElement.Title="{x:Static p:Localization.TTSSettingPage_Text_Speed}"
                           hc:TitleElement.TitlePlacement="Left" />
         <Border BorderThickness="0" Margin="0,5,0,5" />
         <hc:NumericUpDown Style="{StaticResource NumericUpDownExtend}"
@@ -60,7 +61,7 @@
                           Maximum="100"
                           Value="{Binding Volume , Mode=OneWay}"
                           ValueChanged="NudVolume_OnValueChanged"
-                          hc:TitleElement.Title="Volume (0 ~ 100)"
+                          hc:TitleElement.Title="{x:Static p:Localization.TTSSettingPage_Text_Volume}"
                           hc:TitleElement.TitlePlacement="Left" />
     </StackPanel>
 </Page>

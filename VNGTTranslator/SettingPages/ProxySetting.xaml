@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:settingPages="clr-namespace:VNGTTranslator.SettingPages"
+      xmlns:p="clr-namespace:VNGTTranslator.Properties"
       mc:Ignorable="d"
       Background="White"
       d:DesignHeight="450" d:DesignWidth="800"
@@ -12,7 +13,8 @@
       Title="ProxySetting">
     <Grid>
         <StackPanel>
-            <GroupBox Header="Proxy" FontSize="20" FontWeight="Bold" Style="{x:Null}">
+            <GroupBox Header="{x:Static p:Localization.ProxySettingPage_Text_Proxy}" FontSize="20" FontWeight="Bold"
+                      Style="{x:Null}">
                 <StackPanel>
                     <StackPanel.Resources>
                         <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
@@ -29,9 +31,9 @@
                         </Style>
                     </StackPanel.Resources>
                     <CheckBox IsChecked="{Binding IsUseProxy}"
-                              Content="Use Proxy" />
+                              Content="{x:Static p:Localization.ProxySettingPage_Text_UseProxy}" />
                     <CheckBox IsChecked="{Binding IsUseSystemProxy}"
-                              Content="Use System Proxy" />
+                              Content="{x:Static p:Localization.ProxySettingPage_Text_UseSystemProxy}" />
 
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,5">
                         <Label Content="IP" Width="50" HorizontalContentAlignment="Left" />

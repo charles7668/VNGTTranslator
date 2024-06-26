@@ -6,6 +6,7 @@
       xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
       xmlns:local="clr-namespace:VNGTTranslator.SettingPages"
       xmlns:hc="https://handyorg.github.io/handycontrol"
+      xmlns:p="clr-namespace:VNGTTranslator.Properties"
       mc:Ignorable="d"
       d:DataContext="{d:DesignInstance local:TranslateSetting}"
       d:DesignHeight="450" d:DesignWidth="800"
@@ -30,21 +31,41 @@
                 </Style>
             </StackPanel.Resources>
             <StackPanel Orientation="Horizontal">
-                <Label Content="Max Translate Word Count : " />
+                <Label>
+                    <TextBlock>
+                        <TextBlock Text="{x:Static p:Localization.TranslateSettingPage_Text_MaxTranslateWord}" />
+                        :
+                    </TextBlock>
+                </Label>
                 <hc:NumericUpDown Value="{Binding MaxTranslateWordCount}" Minimum="100" Maximum="10000" />
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="Source Language : " />
+                <Label>
+                    <TextBlock>
+                        <TextBlock Text="{x:Static p:Localization.TranslateSettingPage_Text_SourceLanguage}" />
+                        :
+                    </TextBlock>
+                </Label>
                 <hc:ComboBox ItemsSource="{Binding SupportLanguages}"
                              SelectedItem="{Binding SelectedSourceLanguage}" />
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="Target Language : " />
+                <Label>
+                    <TextBlock>
+                        <TextBlock Text="{x:Static p:Localization.TranslateSettingPage_Text_TargetLanguage}" />
+                        :
+                    </TextBlock>
+                </Label>
                 <hc:ComboBox ItemsSource="{Binding SupportLanguages }"
                              SelectedItem="{Binding SelectedTargetLanguage}" />
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="Translate Interval : " />
+                <Label>
+                    <TextBlock>
+                        <TextBlock Text="{x:Static p:Localization.TranslateSettingPage_Text_TranslateInterval}" />
+                        :
+                    </TextBlock>
+                </Label>
                 <hc:NumericUpDown Value="{Binding TranslateInterval}"
                                   Minimum="300"
                                   Maximum="100000" />
@@ -58,7 +79,8 @@
                     <Setter Property="FontWeight" Value="Bold" />
                 </Style>
             </TabControl.Resources>
-            <TabItem Header="Translate Source" Style="{StaticResource TabItemNew}">
+            <TabItem Header="{x:Static p:Localization.TranslateSettingPage_Text_TranslatorSource}"
+                     Style="{StaticResource TabItemNew}">
                 <ItemsControl ItemsSource="{Binding TranslateProviderList}">
                     <ItemsControl.Resources>
                         <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">

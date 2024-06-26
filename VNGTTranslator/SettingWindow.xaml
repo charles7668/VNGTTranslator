@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:vngtTranslator="clr-namespace:VNGTTranslator"
+        xmlns:p="clr-namespace:VNGTTranslator.Properties"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vngtTranslator:SettingWindow}"
         Icon="pack://application:,,,/VNGTTranslator;component/Resources/app.ico"
-        Title="SettingWindow" Height="650" Width="800">
+        Title="{x:Static p:Localization.HookSelectWindow_Text_Title}" Height="650" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" />
@@ -17,15 +18,16 @@
         <hc:SideMenu BorderThickness="1"
                      Width="200" HorizontalAlignment="Left"
                      VerticalAlignment="Stretch">
-            <hc:SideMenuItem IsSelected="True" Header="About VNGTTranslator" FontSize="15"
+            <hc:SideMenuItem IsSelected="True" Header="{x:Static p:Localization.SettingWindow_Text_About}"
+                             FontSize="15"
                              Selected="SideMenuItemAbout_OnSelected" />
-            <hc:SideMenuItem Header="Translate Window Setting" FontSize="15"
+            <hc:SideMenuItem Header="{x:Static p:Localization.SettingWindow_Text_TranslateWindowSetting}" FontSize="15"
                              Selected="SideMenuItemTranslateWindowSetting_OnSelected" />
-            <hc:SideMenuItem Header="Translate Setting" FontSize="15"
+            <hc:SideMenuItem Header="{x:Static p:Localization.SettingWindow_Text_TranslateSetting}" FontSize="15"
                              Selected="SideMenuItemTranslateSetting_OnSelected" />
-            <hc:SideMenuItem Header="Proxy Setting" FontSize="15"
+            <hc:SideMenuItem Header="{x:Static p:Localization.SettingWindow_Text_ProxySetting}" FontSize="15"
                              Selected="SideMenuItemProxySetting_OnSelected" />
-            <hc:SideMenuItem Header="TTS Setting" FontSize="15"
+            <hc:SideMenuItem Header="{x:Static p:Localization.SettingWindow_Text_TTSSetting}" FontSize="15"
                              Selected="SideMenuItemTTSSetting_OnSelected" />
         </hc:SideMenu>
         <Frame Grid.Column="1" Name="FramePage"

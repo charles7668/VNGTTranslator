@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows.Navigation;
+using VNGTTranslator.Properties;
 
 namespace VNGTTranslator.SettingPages
 {
@@ -17,7 +18,8 @@ namespace VNGTTranslator.SettingPages
             DataContext = this;
         }
 
-        public string VersionText => $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
+        public string VersionText =>
+            $"{Localization.AboutPage_Text_Version}: {Assembly.GetExecutingAssembly().GetName().Version}";
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

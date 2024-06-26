@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:hc="https://handyorg.github.io/handycontrol"
       xmlns:settingPages="clr-namespace:VNGTTranslator.SettingPages"
+      xmlns:p="clr-namespace:VNGTTranslator.Properties"
       mc:Ignorable="d"
       d:DesignHeight="550" d:DesignWidth="800"
       d:DataContext="{d:DesignInstance d:Type=settingPages:TranslateWindowSetting}"
@@ -26,8 +27,10 @@
             <StackPanel Orientation="Horizontal">
                 <StackPanel.Resources>
                 </StackPanel.Resources>
-                <TextBlock Text="Window Color And Transparent: " VerticalAlignment="Center" />
-                <Button Content="Select Color"
+                <TextBlock VerticalAlignment="Center">
+                    <TextBlock Text="{x:Static p:Localization.TranslateWindowSettingPage_Text_WindowColor}" />:
+                </TextBlock>
+                <Button Content="{x:Static p:Localization.TranslateWindowSettingPage_Text_SelectColor}"
                         Margin="10" Width="200"
                         FontSize="15"
                         Background="{Binding TranslateWindowColor}"
@@ -54,11 +57,12 @@
                         <Setter Property="FontWeight" Value="Bold" />
                     </Style>
                 </TabControl.Resources>
-                <TabItem Header="Source Text Font Style">
+                <TabItem Header="{x:Static p:Localization.TranslateWindowSettingPage_Text_SourceTextFontStyle}">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" />
-                        <TextBlock Text="Font Color" Margin="8,0,0,0" />
-                        <Button Content="Select Color"
+                        <TextBlock Text="{x:Static p:Localization.TranslateWindowSettingPage_Text_FontColor}"
+                                   Margin="8,0,0,0" />
+                        <Button Content="{x:Static p:Localization.TranslateWindowSettingPage_Text_SelectColor}"
                                 HorizontalAlignment="Left"
                                 Margin="8"
                                 Background="{Binding SourceTextColor}"
@@ -67,11 +71,11 @@
                                      ItemsSource="{Binding FontList}"
                                      SelectedItem="{Binding SelectedSourceFont }"
                                      hc:InfoElement.TitlePlacement="Top"
-                                     hc:InfoElement.Title="Font" />
+                                     hc:InfoElement.Title="{x:Static p:Localization.TranslateWindowSettingPage_Text_FontFamily}" />
                         <hc:NumericUpDown Minimum="8"
                                           Value="{Binding SourceFontSize , Mode=TwoWay}"
-                                          hc:InfoElement.Title="Font Size" />
-                        <CheckBox Content="Enable Text Shadow"
+                                          hc:InfoElement.Title="{x:Static p:Localization.TranslateWindowSettingPage_Text_FontSize}" />
+                        <CheckBox Content="{x:Static p:Localization.TranslateWindowSettingPage_Text_EnableTextShadow}"
                                   IsChecked="{Binding IsSourceTextShadowEnabled}"
                                   Margin="10"
                                   HorizontalAlignment="Left" />

@@ -6,6 +6,7 @@
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vngtTranslator="clr-namespace:VNGTTranslator"
+        xmlns:p="clr-namespace:VNGTTranslator.Properties"
         mc:Ignorable="d"
         hc:WindowAttach.IsDragElement="True"
         WindowStyle="None" AllowsTransparency="True"
@@ -51,20 +52,20 @@
             <StackPanel HorizontalAlignment="Left">
                 <ToggleButton IsChecked="{Binding IsTransparent}"
                               Click="BtnLock_OnClick"
-                              ToolTip="Transparent">
+                              ToolTip="{x:Static p:Localization.TranslateWindow_Text_Transparent}">
                     <ToggleButton.Content>
                         <fa:IconBlock Icon="MousePointer" />
                     </ToggleButton.Content>
                 </ToggleButton>
                 <ToggleButton Click="BtnAllowSizeChange_OnClick"
-                              ToolTip="Allow resize the window">
+                              ToolTip="{x:Static p:Localization.TranslateWindow_Text_AllowResizeWindow}">
                     <ToggleButton.Content>
                         <fa:IconBlock Icon="Expand" />
                     </ToggleButton.Content>
                 </ToggleButton>
                 <ToggleButton IsChecked="True"
                               Click="BtnToggleOnTop_OnClick"
-                              ToolTip="Toggle OnTop">
+                              ToolTip="{x:Static p:Localization.TranslateWindow_Text_ToggleOnTop}">
                     <ToggleButton.Content>
                         <fa:IconBlock Icon="MapPin" />
                     </ToggleButton.Content>
@@ -72,7 +73,7 @@
             </StackPanel>
             <StackPanel HorizontalAlignment="Center">
                 <Button Click="BtnPause_OnClick"
-                        ToolTip="Pause/Resume Translator">
+                        ToolTip="{x:Static p:Localization.TranslateWindow_Text_PauseOrResumeTranslator}">
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                             <Setter Property="Content">
@@ -93,13 +94,13 @@
                     </Button.Style>
                 </Button>
                 <Button Click="BtnReTranslate_OnClick"
-                        ToolTip="Re-translate">
+                        ToolTip="{x:Static p:Localization.TranslateWindow_Text_ReTranslate}">
                     <Button.Content>
                         <fa:IconBlock Icon="Repeat" />
                     </Button.Content>
                 </Button>
                 <Button Click="BtnShowSourceText_OnClick"
-                        ToolTip="Show source text">
+                        ToolTip="{x:Static p:Localization.TranslateWindow_Text_ShowSourceText}">
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                             <Setter Property="Content">
@@ -120,20 +121,20 @@
                     </Button.Style>
                 </Button>
                 <Button Click="BtnHistory_OnClick"
-                        ToolTip="Show history">
+                        ToolTip="{x:Static p:Localization.TranslateWindow_Text_ShowHistory}">
                     <Button.Content>
                         <fa:IconBlock Icon="History" />
                     </Button.Content>
                 </Button>
                 <Button Click="BtnSelectHookCode_OnClick"
-                        ToolTip="Select hook code">
+                        ToolTip="{x:Static p:Localization.TranslateWindow_Text_SelectHookCode}">
                     <Button.Style>
                         <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                            <Setter Property="Visibility" Value="Visible"></Setter>
+                            <Setter Property="Visibility" Value="Visible" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsHookMode}" Value="False">
-                                    <Setter Property="Visibility" Value="Hidden"></Setter>
-                                    <Setter Property="Width" Value="0"></Setter>
+                                    <Setter Property="Visibility" Value="Hidden" />
+                                    <Setter Property="Width" Value="0" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
@@ -142,19 +143,19 @@
                         <fa:IconBlock Icon="ListAlt" />
                     </Button.Content>
                 </Button>
-                <Button Click="BtnSetting_OnClick" ToolTip="Setting">
+                <Button Click="BtnSetting_OnClick" ToolTip="{x:Static p:Localization.TranslateWindow_Text_Setting}">
                     <Button.Content>
                         <fa:IconBlock Icon="Cog" />
                     </Button.Content>
                 </Button>
                 <Button Click="BtnReadAloud_OnClick"
-                        ToolTip="Read the source text aloud">
+                        ToolTip="{x:Static p:Localization.TranslateWindow_Text_ReadAloud}">
                     <Button.Content>
                         <fa:IconBlock Icon="Microphone" />
                     </Button.Content>
                 </Button>
                 <Button Click="BtnSelectProcess_OnClick"
-                        ToolTip="Select process">
+                        ToolTip="{x:Static p:Localization.TranslateWindow_Text_SelectProcess}">
                     <Button.Content>
                         <fa:IconBlock Icon="Microchip" />
                     </Button.Content>
@@ -162,13 +163,13 @@
             </StackPanel>
             <StackPanel HorizontalAlignment="Right">
                 <Button Click="BtnMinimizeWindow_OnClick"
-                        ToolTip="Minimize the window">
+                        ToolTip="{x:Static p:Localization.TranslateWindow_Text_MinimizeWindow}">
                     <Button.Content>
                         <fa:IconBlock Icon="WindowMinimize" />
                     </Button.Content>
                 </Button>
                 <Button Click="BtnExit_OnClick"
-                        ToolTip="Exit">
+                        ToolTip="{x:Static p:Localization.TranslateWindow_Text_Exit}">
                     <Button.Content>
                         <fa:IconBlock Icon="WindowClose" />
                     </Button.Content>
