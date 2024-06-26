@@ -230,9 +230,9 @@ namespace VNGTTranslator
             _ttsProvider.SpeakAsync(SourceText);
         }
 
-        private void BtnReTranslate_OnClick(object sender, RoutedEventArgs e)
+        private async void BtnReTranslate_OnClick(object sender, RoutedEventArgs e)
         {
-            Task.WaitAll(UseTranslateProviderDataContexts.Select(context => context.Translate(SourceText))
+            await Task.WhenAll(UseTranslateProviderDataContexts.Select(context => context.Translate(SourceText))
                 .ToArray());
         }
 
