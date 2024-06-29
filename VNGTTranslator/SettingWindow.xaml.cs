@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using VNGTTranslator.Models;
 
 namespace VNGTTranslator
 {
@@ -68,6 +69,12 @@ namespace VNGTTranslator
         private void SideMenuItemAppSetting_OnSelected(object sender, RoutedEventArgs e)
         {
             NavigateTo = new Uri("SettingPages/AppSetting.xaml", UriKind.Relative);
+        }
+
+        private void SettingWindow_OnClosing(object? sender, CancelEventArgs e)
+        {
+            if (FramePage.Content is ISaveable saveable)
+                saveable.Save();
         }
     }
 }

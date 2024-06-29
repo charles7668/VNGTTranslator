@@ -15,7 +15,7 @@ namespace VNGTTranslator.SettingPages
     /// <summary>
     /// TranslateSetting.xaml 的互動邏輯
     /// </summary>
-    public partial class TranslateSetting : INotifyPropertyChanged
+    public partial class TranslateSetting : INotifyPropertyChanged, ISaveable
     {
         public TranslateSetting()
         {
@@ -82,6 +82,13 @@ namespace VNGTTranslator.SettingPages
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        public void Save()
+        {
+            IAppConfigProvider appConfigProvider = Program.ServiceProvider.GetRequiredService<IAppConfigProvider>();
+            appConfigProvider.GetAppConfig().Update(_appConfig);
+            appConfigProvider.TrySaveAppConfig();
+        }
+
         private void BtnProviderCheck_OnClick(object sender, RoutedEventArgs e)
         {
             if (sender is not Button button) return;
@@ -141,9 +148,7 @@ namespace VNGTTranslator.SettingPages
 
         private void TranslateSetting_OnUnloaded(object sender, RoutedEventArgs e)
         {
-            IAppConfigProvider appConfigProvider = Program.ServiceProvider.GetRequiredService<IAppConfigProvider>();
-            appConfigProvider.GetAppConfig().Update(_appConfig);
-            appConfigProvider.TrySaveAppConfig();
+            Save();
         }
 
         public class TranslateProviderBindingContext

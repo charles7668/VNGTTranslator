@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using VNGTTranslator.Configs;
+using VNGTTranslator.Models;
 using VNGTTranslator.TTSProviders;
 
 namespace VNGTTranslator.SettingPages
@@ -13,7 +14,7 @@ namespace VNGTTranslator.SettingPages
     /// <summary>
     /// TTSSetting.xaml 的互動邏輯
     /// </summary>
-    public partial class TTSSetting : INotifyPropertyChanged
+    public partial class TTSSetting : INotifyPropertyChanged, ISaveable
     {
         public TTSSetting()
         {
@@ -102,6 +103,15 @@ namespace VNGTTranslator.SettingPages
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        public void Save()
+        {
+            Task.Run(async () =>
+            {
+                await _previousSelectedProvider.Provider.StoreSettingsAsync().ConfigureAwait(false);
+            }).Wait();
+            _appConfigProvider.TrySaveAppConfig();
+        }
+
         private async void TTSProviderCheck_OnChecked(object sender, RoutedEventArgs e)
         {
             if (sender is not RadioButton radioButton)
@@ -128,10 +138,9 @@ namespace VNGTTranslator.SettingPages
             OnPropertyChanged(propertyName);
         }
 
-        private async void TTSSetting_OnUnloaded(object sender, RoutedEventArgs e)
+        private void TTSSetting_OnUnloaded(object sender, RoutedEventArgs e)
         {
-            await _previousSelectedProvider.Provider.StoreSettingsAsync();
-            _appConfigProvider.TrySaveAppConfig();
+            Save();
         }
 
         private void NudSpeed_OnValueChanged(object? sender, FunctionEventArgs<double> e)

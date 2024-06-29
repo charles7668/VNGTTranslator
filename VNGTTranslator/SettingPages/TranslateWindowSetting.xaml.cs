@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
 using VNGTTranslator.Configs;
+using VNGTTranslator.Models;
 using FontFamily = System.Drawing.FontFamily;
 using Localization = VNGTTranslator.Properties.Localization;
 using Window = System.Windows.Window;
@@ -16,7 +17,7 @@ namespace VNGTTranslator.SettingPages
     /// <summary>
     /// TranslateWindowSetting.xaml 的互動邏輯
     /// </summary>
-    public partial class TranslateWindowSetting : INotifyPropertyChanged
+    public partial class TranslateWindowSetting : INotifyPropertyChanged, ISaveable
     {
         public TranslateWindowSetting()
         {
@@ -113,6 +114,12 @@ namespace VNGTTranslator.SettingPages
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        public void Save()
+        {
+            _appConfigProvider.GetAppConfig().Update(_appConfig);
+            _appConfigProvider.TrySaveAppConfig();
+        }
+
         private void BtnBackgroundColorSelect_OnClick(object sender, RoutedEventArgs e)
         {
             ColorPicker? picker = SingleOpenHelper.CreateControl<ColorPicker>();
@@ -184,8 +191,7 @@ namespace VNGTTranslator.SettingPages
 
         private void TranslateWindowSetting_OnUnloaded(object sender, RoutedEventArgs e)
         {
-            _appConfigProvider.GetAppConfig().Update(_appConfig);
-            _appConfigProvider.TrySaveAppConfig();
+            Save();
         }
     }
 }

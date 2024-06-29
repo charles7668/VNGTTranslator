@@ -4,13 +4,14 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using VNGTTranslator.Configs;
 using VNGTTranslator.Enums;
+using VNGTTranslator.Models;
 
 namespace VNGTTranslator.SettingPages
 {
     /// <summary>
     /// AppSetting.xaml 的互動邏輯
     /// </summary>
-    public partial class AppSetting : INotifyPropertyChanged
+    public partial class AppSetting : INotifyPropertyChanged, ISaveable
     {
         public AppSetting()
         {
@@ -41,6 +42,13 @@ namespace VNGTTranslator.SettingPages
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        public void Save()
+        {
+            AppConfig appConfig = _appConfigProvider.GetAppConfig();
+            appConfig.AppDisplayLanguage = SelectedLanguage;
+            _appConfigProvider.TrySaveAppConfig();
+        }
+
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -56,9 +64,7 @@ namespace VNGTTranslator.SettingPages
 
         private void AppSetting_OnUnloaded(object sender, RoutedEventArgs e)
         {
-            AppConfig appConfig = _appConfigProvider.GetAppConfig();
-            appConfig.AppDisplayLanguage = SelectedLanguage;
-            _appConfigProvider.TrySaveAppConfig();
+            Save();
         }
     }
 }

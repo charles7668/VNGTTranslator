@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using VNGTTranslator.Configs;
+using VNGTTranslator.Models;
 using VNGTTranslator.Network;
 
 namespace VNGTTranslator.SettingPages
@@ -10,7 +11,7 @@ namespace VNGTTranslator.SettingPages
     /// <summary>
     /// ProxySetting.xaml 的互動邏輯
     /// </summary>
-    public partial class ProxySetting : INotifyPropertyChanged
+    public partial class ProxySetting : INotifyPropertyChanged, ISaveable
     {
         public ProxySetting()
         {
@@ -63,6 +64,15 @@ namespace VNGTTranslator.SettingPages
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        public void Save()
+        {
+            IAppConfigProvider appConfigProvider = Program.ServiceProvider.GetRequiredService<IAppConfigProvider>();
+            appConfigProvider.GetAppConfig().Update(_appConfig);
+            INetworkService networkService = Program.ServiceProvider.GetRequiredService<INetworkService>();
+            networkService.UpdateProxySettingUsingAppConfig();
+            appConfigProvider.TrySaveAppConfig();
+        }
+
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -78,11 +88,7 @@ namespace VNGTTranslator.SettingPages
 
         private void ProxySetting_OnUnloaded(object sender, RoutedEventArgs e)
         {
-            IAppConfigProvider appConfigProvider = Program.ServiceProvider.GetRequiredService<IAppConfigProvider>();
-            appConfigProvider.GetAppConfig().Update(_appConfig);
-            INetworkService networkService = Program.ServiceProvider.GetRequiredService<INetworkService>();
-            networkService.UpdateProxySettingUsingAppConfig();
-            appConfigProvider.TrySaveAppConfig();
+            Save();
         }
     }
 }
