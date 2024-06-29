@@ -24,7 +24,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Height="32">
             <Grid.Resources>
@@ -176,44 +176,47 @@
                 </Button>
             </StackPanel>
         </Grid>
-        <StackPanel Grid.Row="1" Margin="10" Orientation="Vertical">
-            <hc:OutlineText Text="{Binding SourceText , Mode=OneWay}"
-                            d:Text="Wait source text"
-                            d:Fill="White"
-                            Fill="{Binding SourceTextColor}" Stroke="Beige" StrokeThickness="1"
-                            Effect="{Binding SourceTextEffect}"
-                            FontFamily="{Binding  SourceFontFamily}"
-                            FontSize="{Binding SourceFontSize}"
-                            Margin="10,0,10,10" TextWrapping="Wrap" StrokePosition="Outside">
-                <hc:OutlineText.Style>
-                    <Style TargetType="hc:OutlineText">
-                        <Setter Property="Visibility" Value="Visible" />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsShowSourceText}" Value="False">
-                                <Setter Property="Visibility" Value="Hidden" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </hc:OutlineText.Style>
-            </hc:OutlineText>
-            <ItemsControl ItemsSource="{Binding UseTranslateProviderDataContexts}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <hc:OutlineText Text="{Binding TranslatedText}"
-                                        Fill="{Binding  ProviderTextColor}" Stroke="Beige"
-                                        Effect="{Binding ProviderTextEffect}"
-                                        FontSize="{Binding ProviderTextSize}"
-                                        FontFamily="{Binding ProviderFontFamily}"
-                                        StrokeThickness="1"
-                                        Margin="10,0,10,10" TextWrapping="Wrap" StrokePosition="Outside" />
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-        </StackPanel>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Auto">
+            <StackPanel Margin="10" Orientation="Vertical" CanVerticallyScroll="True">
+                <hc:OutlineText Text="{Binding SourceText , Mode=OneWay}"
+                                d:Text="Wait source text"
+                                d:Fill="White"
+                                Fill="{Binding SourceTextColor}" Stroke="Beige" StrokeThickness="1"
+                                Effect="{Binding SourceTextEffect}"
+                                FontFamily="{Binding  SourceFontFamily}"
+                                FontSize="{Binding SourceFontSize}"
+                                Margin="10,0,10,10" TextWrapping="Wrap" StrokePosition="Outside">
+                    <hc:OutlineText.Style>
+                        <Style TargetType="hc:OutlineText">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsShowSourceText}" Value="False">
+                                    <Setter Property="Visibility" Value="Hidden" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </hc:OutlineText.Style>
+                </hc:OutlineText>
+                <ItemsControl ItemsSource="{Binding UseTranslateProviderDataContexts}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <hc:OutlineText Text="{Binding TranslatedText}"
+                                            Fill="{Binding  ProviderTextColor}" Stroke="Beige"
+                                            Effect="{Binding ProviderTextEffect}"
+                                            FontSize="{Binding ProviderTextSize}"
+                                            FontFamily="{Binding ProviderFontFamily}"
+                                            StrokeThickness="1"
+                                            Margin="10,0,10,10" TextWrapping="Wrap" StrokePosition="Outside" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>
