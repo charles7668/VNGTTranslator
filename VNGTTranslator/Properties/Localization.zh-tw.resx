@@ -271,6 +271,9 @@
   <data name="TTSSettingPage.Text.Speed" xml:space="preserve">
     <value>語速(-10~10)</value>
   </data>
+  <data name="TTSSettingPage.Text.TestVoice" xml:space="preserve">
+    <value>測試</value>
+  </data>
   <data name="TTSSettingPage.Text.Volume" xml:space="preserve">
     <value>音量(0~100)</value>
   </data>

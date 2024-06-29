@@ -63,5 +63,11 @@
                           ValueChanged="NudVolume_OnValueChanged"
                           hc:TitleElement.Title="{x:Static p:Localization.TTSSettingPage_Text_Volume}"
                           hc:TitleElement.TitlePlacement="Left" />
+        <Button HorizontalAlignment="Left"
+                Style="{StaticResource ButtonPrimary}"
+                Margin="0,5,0,5"
+                Click="BtnTestVoice_OnClick"
+                Content="{x:Static p:Localization.TTSSettingPage_Text_TestVoice}" />
+        <hc:TextBox Height="50" MaxHeight="50" Text="{Binding TestText}" />
     </StackPanel>
 </Page>

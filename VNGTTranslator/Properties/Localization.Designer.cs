@@ -583,6 +583,15 @@ namespace VNGTTranslator.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 Test 的當地語系化字串。
+        /// </summary>
+        public static string TTSSettingPage_Text_TestVoice {
+            get {
+                return ResourceManager.GetString("TTSSettingPage.Text.TestVoice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 Volume(0~100) 的當地語系化字串。
         /// </summary>
         public static string TTSSettingPage_Text_Volume {

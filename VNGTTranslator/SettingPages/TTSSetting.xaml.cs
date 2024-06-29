@@ -50,6 +50,14 @@ namespace VNGTTranslator.SettingPages
 
         private List<string> _providerVoices = [];
 
+        private string _testText = "input your test text here";
+
+        public string TestText
+        {
+            get => _testText;
+            set => SetField(ref _testText, value);
+        }
+
         public List<TTSProviderDataContext> TTSProviders { get; }
 
         public List<string> ProviderVoices
@@ -140,6 +148,13 @@ namespace VNGTTranslator.SettingPages
             if (e.Info < nud.Minimum || e.Info > nud.Maximum)
                 return;
             Volume = (int)e.Info;
+        }
+
+        private void BtnTestVoice_OnClick(object sender, RoutedEventArgs e)
+        {
+            ITTSProvider provider = _previousSelectedProvider.Provider;
+            provider.StopSpeak();
+            provider.SpeakAsync(TestText);
         }
 
         public class TTSProviderDataContext(ITTSProvider provider) : INotifyPropertyChanged
