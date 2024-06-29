@@ -185,7 +185,7 @@
     <value>使用代理(如果程式的代理設定已啟用)</value>
   </data>
   <data name="TranslateSettingPage.Text.MaxTranslateWord" xml:space="preserve">
-    <value>    </value>
+    <value>最長翻譯文字數</value>
   </data>
   <data name="TranslateSettingPage.Text.SourceLanguage" xml:space="preserve">
     <value>來源語言</value>
