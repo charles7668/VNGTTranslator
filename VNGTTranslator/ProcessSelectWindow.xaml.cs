@@ -14,6 +14,7 @@ using VNGTTranslator.LunaHook;
 using VNGTTranslator.Models;
 using VNGTTranslator.OCRProviders;
 using Win32ApiLibrary;
+using Windows.System;
 using MessageBox = System.Windows.MessageBox;
 using Point = System.Windows.Point;
 
@@ -218,6 +219,8 @@ namespace VNGTTranslator
             if (!setLanguageResult)
             {
                 MessageBox.Show(setLanguageResult.ErrorMessage, "error", MessageBoxButton.OK, MessageBoxImage.Error);
+                if (ocrProvider is WindowOCRProvider)
+                    Launcher.LaunchUriAsync(new Uri("ms-settings:regionlanguage-adddisplaylanguage"));
                 return;
             }
 
