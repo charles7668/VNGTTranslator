@@ -5,7 +5,7 @@ namespace VNGTTranslator.Converters
 {
     internal class LanguageStringConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is List<string> languageList)
             {
@@ -34,16 +34,16 @@ namespace VNGTTranslator.Converters
                     case "ja":
                         return "Japanese";
                     case "zh-tw":
-                        return "Chinese (Simplified)";
-                    case "zh-cn":
                         return "Chinese (Traditional)";
+                    case "zh-cn":
+                        return "Chinese (Simplified)";
                     default:
                         return "Unknown";
                 }
             }
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (value is List<string> langList)
             {
@@ -72,9 +72,9 @@ namespace VNGTTranslator.Converters
                     case "Japanese":
                         return "ja";
                     case "Chinese (Simplified)":
-                        return "zh-tw";
-                    case "Chinese (Traditional)":
                         return "zh-cn";
+                    case "Chinese (Traditional)":
+                        return "zh-tw";
                     default:
                         return "Unknown";
                 }
