@@ -109,6 +109,9 @@
   <data name="AboutPage.Text.WebSite" xml:space="preserve">
     <value>網站</value>
   </data>
+  <data name="AppSettingPage.Text.DisplayLanguage" xml:space="preserve">
+    <value>顯示語言(重啟後生效)</value>
+  </data>
   <data name="ColorPicker.Text.Title" xml:space="preserve">
     <value>選擇顏色</value>
   </data>
@@ -156,6 +159,9 @@
   </data>
   <data name="SettingWindow.Text.About" xml:space="preserve">
     <value>關於</value>
+  </data>
+  <data name="SettingWindow.Text.AppSetting" xml:space="preserve">
+    <value>程式設定</value>
   </data>
   <data name="SettingWindow.Text.ProxySetting" xml:space="preserve">
     <value>代理設定</value>

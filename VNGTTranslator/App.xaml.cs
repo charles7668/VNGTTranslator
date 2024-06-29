@@ -2,8 +2,11 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
 using System.Windows;
+using VNGTTranslator.Configs;
+using VNGTTranslator.Enums;
 using VNGTTranslator.Hooker;
 using VNGTTranslator.LunaHook;
+using MessageBox = System.Windows.MessageBox;
 
 namespace VNGTTranslator
 {
@@ -28,15 +31,47 @@ namespace VNGTTranslator
             base.OnExit(e);
         }
 
+        private void SetHandyControlLanguage(Language language)
+        {
+            switch (language)
+            {
+                case Language.CHINESE_TRADITIONAL:
+                    ConfigHelper.Instance.SetLang("zh-tw");
+                    break;
+                case Language.CHINESE_SIMPLIFIED:
+                    ConfigHelper.Instance.SetLang("zh-cn");
+                    break;
+                default:
+                    ConfigHelper.Instance.SetLang("en");
+                    break;
+            }
+        }
+
+        private void SetAppDisplayLanguage(Language language)
+        {
+            string lang = "en";
+            switch (language)
+            {
+                case Language.CHINESE_TRADITIONAL:
+                    lang = "zh-tw";
+                    break;
+                case Language.CHINESE_SIMPLIFIED:
+                    lang = "zh-cn";
+                    break;
+            }
+
+            var culture = new CultureInfo(lang);
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
+        }
+
         protected override void OnStartup(StartupEventArgs e)
         {
             Program.InitServices();
 
-            ConfigHelper.Instance.SetLang("en");
-
-            var culture = new CultureInfo("zh-tw");
-            Thread.CurrentThread.CurrentCulture = culture;
-            Thread.CurrentThread.CurrentUICulture = culture;
+            AppConfig appConfig = Program.ServiceProvider.GetRequiredService<IAppConfigProvider>().GetAppConfig();
+            SetHandyControlLanguage(appConfig.AppDisplayLanguage);
+            SetAppDisplayLanguage(appConfig.AppDisplayLanguage);
 
             base.OnStartup(e);
 

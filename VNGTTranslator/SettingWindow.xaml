@@ -21,6 +21,8 @@
             <hc:SideMenuItem IsSelected="True" Header="{x:Static p:Localization.SettingWindow_Text_About}"
                              FontSize="15"
                              Selected="SideMenuItemAbout_OnSelected" />
+            <hc:SideMenuItem Header="{x:Static p:Localization.SettingWindow_Text_AppSetting}" FontSize="15"
+                             Selected="SideMenuItemAppSetting_OnSelected" />
             <hc:SideMenuItem Header="{x:Static p:Localization.SettingWindow_Text_TranslateWindowSetting}" FontSize="15"
                              Selected="SideMenuItemTranslateWindowSetting_OnSelected" />
             <hc:SideMenuItem Header="{x:Static p:Localization.SettingWindow_Text_TranslateSetting}" FontSize="15"

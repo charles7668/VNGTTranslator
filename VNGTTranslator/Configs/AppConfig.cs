@@ -1,5 +1,5 @@
-﻿using ABI.Windows.Devices.Input;
-using System.Windows.Media;
+﻿using System.Windows.Media;
+using VNGTTranslator.Enums;
 using VNGTTranslator.Models;
 using VNGTTranslator.TranslateProviders;
 
@@ -7,6 +7,8 @@ namespace VNGTTranslator.Configs
 {
     public class AppConfig
     {
+        public Language AppDisplayLanguage { get; set; } = Language.CHINESE_TRADITIONAL;
+
         public uint MaxTranslateWordCount { get; set; } = 1000;
 
         public Color TranslateWindowColor { get; set; } = Color.FromArgb(128, 0, 0, 0);
@@ -44,7 +46,8 @@ namespace VNGTTranslator.Configs
                 ProxyAddress = ProxyAddress,
                 ProxyPort = ProxyPort,
                 UseTTSProvider = UseTTSProvider,
-                UseOCRProvider = UseOCRProvider
+                UseOCRProvider = UseOCRProvider,
+                AppDisplayLanguage = AppDisplayLanguage
             };
         }
 
@@ -62,6 +65,7 @@ namespace VNGTTranslator.Configs
             ProxyPort = appConfig.ProxyPort;
             UseTTSProvider = appConfig.UseTTSProvider;
             UseOCRProvider = appConfig.UseOCRProvider;
+            AppDisplayLanguage = appConfig.AppDisplayLanguage;
         }
     }
 }

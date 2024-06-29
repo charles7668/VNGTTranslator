@@ -5,10 +5,10 @@ using System.IO;
 using VNGTTranslator.Enums;
 using VNGTTranslator.Helper;
 using VNGTTranslator.Models;
-using Windows.Globalization;
 using Windows.Graphics.Imaging;
 using Windows.Media.Ocr;
 using Windows.Storage.Streams;
+using Language = Windows.Globalization.Language;
 
 namespace VNGTTranslator.OCRProviders
 {

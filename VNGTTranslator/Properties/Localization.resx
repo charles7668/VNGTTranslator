@@ -109,6 +109,9 @@
   <data name="AboutPage.Text.WebSite" xml:space="preserve">
     <value>Website</value>
   </data>
+  <data name="AppSettingPage.Text.DisplayLanguage" xml:space="preserve">
+    <value>Display Language(Effective after restart)</value>
+  </data>
   <data name="ColorPicker.Text.Title" xml:space="preserve">
     <value>Select Color</value>
   </data>
@@ -156,6 +159,9 @@
   </data>
   <data name="SettingWindow.Text.About" xml:space="preserve">
     <value>About</value>
+  </data>
+  <data name="SettingWindow.Text.AppSetting" xml:space="preserve">
+    <value>App Setting</value>
   </data>
   <data name="SettingWindow.Text.ProxySetting" xml:space="preserve">
     <value>Proxy Setting</value>

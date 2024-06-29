@@ -97,6 +97,15 @@ namespace VNGTTranslator.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 Display Language(Effective after restart) 的當地語系化字串。
+        /// </summary>
+        public static string AppSettingPage_Text_DisplayLanguage {
+            get {
+                return ResourceManager.GetString("AppSettingPage.Text.DisplayLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 Select Color 的當地語系化字串。
         /// </summary>
         public static string ColorPicker_Text_Title {
@@ -237,6 +246,15 @@ namespace VNGTTranslator.Properties {
         public static string SettingWindow_Text_About {
             get {
                 return ResourceManager.GetString("SettingWindow.Text.About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 App Setting 的當地語系化字串。
+        /// </summary>
+        public static string SettingWindow_Text_AppSetting {
+            get {
+                return ResourceManager.GetString("SettingWindow.Text.AppSetting", resourceCulture);
             }
         }
         

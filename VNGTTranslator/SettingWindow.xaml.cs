@@ -64,5 +64,10 @@ namespace VNGTTranslator
         {
             NavigateTo = new Uri("SettingPages/TTSSetting.xaml", UriKind.Relative);
         }
+
+        private void SideMenuItemAppSetting_OnSelected(object sender, RoutedEventArgs e)
+        {
+            NavigateTo = new Uri("SettingPages/AppSetting.xaml", UriKind.Relative);
+        }
     }
 }

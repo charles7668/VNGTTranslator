@@ -1,0 +1,27 @@
+﻿<Page x:Class="VNGTTranslator.SettingPages.AppSetting"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:hc="https://handyorg.github.io/handycontrol"
+      xmlns:p="clr-namespace:VNGTTranslator.Properties"
+      xmlns:converters="clr-namespace:VNGTTranslator.Converters"
+      xmlns:settingPages="clr-namespace:VNGTTranslator.SettingPages"
+      mc:Ignorable="d"
+      d:DesignHeight="450" d:DesignWidth="800"
+      d:DataContext="{d:DesignInstance settingPages:AppSetting}"
+      Unloaded="AppSetting_OnUnloaded"
+      Background="White"
+      Title="AppSetting">
+    <Page.Resources>
+        <converters:LanguageEnumToStringConverter x:Key="LanguageEnumToStringConverter" />
+    </Page.Resources>
+    <hc:SimpleStackPanel Margin="5">
+        <hc:ComboBox hc:TitleElement.Title="{x:Static p:Localization.AppSettingPage_Text_DisplayLanguage}"
+                     hc:TitleElement.TitlePlacement="Left"
+                     ItemsSource="{Binding DisplayLanguages , Converter={StaticResource LanguageEnumToStringConverter}}"
+                     SelectedItem="{Binding SelectedLanguage , Converter={StaticResource LanguageEnumToStringConverter}}"
+                     FontSize="15"
+                     FontWeight="Bold" />
+    </hc:SimpleStackPanel>
+</Page>
