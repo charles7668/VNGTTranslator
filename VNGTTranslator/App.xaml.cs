@@ -1,6 +1,8 @@
 ﻿using HandyControl.Tools;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Windows;
 using VNGTTranslator.Configs;
 using VNGTTranslator.Enums;
@@ -29,40 +31,6 @@ namespace VNGTTranslator
             }
 
             base.OnExit(e);
-        }
-
-        private void SetHandyControlLanguage(Language language)
-        {
-            switch (language)
-            {
-                case Language.CHINESE_TRADITIONAL:
-                    ConfigHelper.Instance.SetLang("zh-tw");
-                    break;
-                case Language.CHINESE_SIMPLIFIED:
-                    ConfigHelper.Instance.SetLang("zh-cn");
-                    break;
-                default:
-                    ConfigHelper.Instance.SetLang("en");
-                    break;
-            }
-        }
-
-        private void SetAppDisplayLanguage(Language language)
-        {
-            string lang = "en";
-            switch (language)
-            {
-                case Language.CHINESE_TRADITIONAL:
-                    lang = "zh-tw";
-                    break;
-                case Language.CHINESE_SIMPLIFIED:
-                    lang = "zh-cn";
-                    break;
-            }
-
-            var culture = new CultureInfo(lang);
-            Thread.CurrentThread.CurrentCulture = culture;
-            Thread.CurrentThread.CurrentUICulture = culture;
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -94,6 +62,20 @@ namespace VNGTTranslator
 
             if (Program.PID == 0)
                 return;
+            Process? proc;
+            try
+            {
+                proc = Process.GetProcessById((int)Program.PID);
+            }
+            catch (Exception)
+            {
+                Program.PID = 0;
+                return;
+            }
+
+            // get execution file path
+            Program.BaseExecutionPath = Path.GetDirectoryName(proc?.MainModule?.FileName);
+
             try
             {
                 _hooker.Inject(Program.PID, LunaDll.LunaHookDllPath);
@@ -103,6 +85,40 @@ namespace VNGTTranslator
                 MessageBox.Show($"Inject failed : {exc.Message}", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
                 Shutdown(-1);
+            }
+        }
+
+        private void SetAppDisplayLanguage(Language language)
+        {
+            string lang = "en";
+            switch (language)
+            {
+                case Language.CHINESE_TRADITIONAL:
+                    lang = "zh-tw";
+                    break;
+                case Language.CHINESE_SIMPLIFIED:
+                    lang = "zh-cn";
+                    break;
+            }
+
+            var culture = new CultureInfo(lang);
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
+        }
+
+        private void SetHandyControlLanguage(Language language)
+        {
+            switch (language)
+            {
+                case Language.CHINESE_TRADITIONAL:
+                    ConfigHelper.Instance.SetLang("zh-tw");
+                    break;
+                case Language.CHINESE_SIMPLIFIED:
+                    ConfigHelper.Instance.SetLang("zh-cn");
+                    break;
+                default:
+                    ConfigHelper.Instance.SetLang("en");
+                    break;
             }
         }
     }

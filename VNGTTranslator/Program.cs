@@ -15,6 +15,12 @@ namespace VNGTTranslator
     {
         public static uint PID { get; set; }
 
+        /// <summary>
+        /// This path is for using PID arguments on startup.
+        /// When the process with the matching PID closes, it will then listen to a new process in the same directory.
+        /// </summary>
+        public static string? BaseExecutionPath { get; set; }
+
         public static Mode Mode { get; set; } = Mode.HOOK_MODE;
 
         public static OCRSetting OCRSetting { get; set; } = new();

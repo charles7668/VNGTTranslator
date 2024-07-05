@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel;
 using System.Drawing;
+using System.Management;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
@@ -13,6 +14,7 @@ using VNGTTranslator.Configs;
 using VNGTTranslator.Enums;
 using VNGTTranslator.Helper;
 using VNGTTranslator.Hooker;
+using VNGTTranslator.LunaHook;
 using VNGTTranslator.Models;
 using VNGTTranslator.OCRProviders;
 using VNGTTranslator.TranslateProviders;
@@ -46,6 +48,10 @@ namespace VNGTTranslator
             RefreshDisplayUI();
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
             Topmost = true;
+
+            // listen to process start and stop
+            if (Program.BaseExecutionPath != null)
+                StartUpProcessMonitor();
         }
 
         private readonly AppConfig _appConfig;
@@ -75,6 +81,9 @@ namespace VNGTTranslator
         private bool _pauseState;
 
         private DateTime _previousTranslateTime = new(2000, 01, 01);
+        private CancellationTokenSource _processMonitorCancellationTokenSource = new();
+
+        private Thread _processMonitorThread = null!;
 
         private FontFamily _sourceFontFamily = new("Arial");
 
@@ -342,6 +351,12 @@ namespace VNGTTranslator
         {
             if (!PauseState)
                 _hooker.OnHookTextReceived -= OnHookerTextReceived;
+            _processMonitorCancellationTokenSource.Cancel();
+            while (_processMonitorThread.IsAlive)
+            {
+                Thread.Sleep(10);
+            }
+
             base.OnClosing(e);
         }
 
@@ -382,6 +397,29 @@ namespace VNGTTranslator
 
                 _translateTimeoutTimer.Change(diffTime.Milliseconds, Timeout.Infinite);
             });
+        }
+
+        private void OnProcessStarted(object sender, EventArrivedEventArgs e)
+        {
+            var instance = (ManagementBaseObject?)e.NewEvent?.Properties["TargetInstance"]?.Value;
+            string? exePath = (string?)instance?.Properties["ExecutablePath"]?.Value;
+            if (Program.PID != 0 || exePath == null || !exePath.StartsWith(Program.BaseExecutionPath!))
+                return;
+            int handle = int.Parse((string?)instance?.Properties["Handle"]?.Value ?? "0");
+            if (handle == 0)
+                return;
+            _hooker.Inject(Program.PID, LunaDll.LunaHookDllPath);
+            Program.PID = (uint)handle;
+        }
+
+        private void OnProcessStopped(object sender, EventArrivedEventArgs e)
+        {
+            var instance = (ManagementBaseObject?)e.NewEvent?.Properties["TargetInstance"]?.Value;
+            int handle = int.Parse((string?)instance?.Properties["Handle"]?.Value ?? "0");
+            if (handle == 0 || handle != Program.PID)
+                return;
+            _hooker.Detach(Program.PID);
+            Program.PID = 0;
         }
 
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -447,6 +485,32 @@ namespace VNGTTranslator
             Background = IsTransparent
                 ? new SolidColorBrush(Colors.Transparent)
                 : new SolidColorBrush(_appConfig.TranslateWindowColor);
+        }
+
+        private void StartUpProcessMonitor()
+        {
+            _processMonitorCancellationTokenSource = new CancellationTokenSource();
+            _processMonitorThread = new Thread(() =>
+            {
+                string queryString =
+                    "SELECT * FROM __InstanceCreationEvent WITHIN .025 WHERE TargetInstance ISA 'Win32_Process'";
+                var startWatch = new ManagementEventWatcher(@"\\.\root\CIMV2", queryString);
+                startWatch.EventArrived += OnProcessStarted;
+                startWatch.Start();
+                queryString =
+                    "SELECT * FROM __InstanceDeletionEvent WITHIN .025 WHERE TargetInstance ISA 'Win32_Process'";
+                var stopWatch = new ManagementEventWatcher(@"\\.\root\CIMV2", queryString);
+                stopWatch.EventArrived += OnProcessStopped;
+                stopWatch.Start();
+                while (!_processMonitorCancellationTokenSource.Token.IsCancellationRequested)
+                {
+                    Thread.Sleep(100);
+                }
+
+                startWatch.Stop();
+                stopWatch.Stop();
+            });
+            _processMonitorThread.Start();
         }
 
         private async Task TranslateAsync()

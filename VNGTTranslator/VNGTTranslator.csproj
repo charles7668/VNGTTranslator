@@ -30,6 +30,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
     <PackageReference Include="System.ComponentModel.Composition" Version="8.0.0" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
     <PackageReference Include="System.Speech" Version="8.0.0" />
     <FrameworkReference Include="Microsoft.Windows.SDK.NET.Ref" Version="10.0.22621.0" />
   </ItemGroup>
