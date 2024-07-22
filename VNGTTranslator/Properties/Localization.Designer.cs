@@ -142,6 +142,24 @@ namespace VNGTTranslator.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 Execution file is not found 的當地語系化字串。
+        /// </summary>
+        public static string Error_ExecutionFileNotFound {
+            get {
+                return ResourceManager.GetString("Error.ExecutionFileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Failed to start process 的當地語系化字串。
+        /// </summary>
+        public static string Error_FailedToStartProcess {
+            get {
+                return ResourceManager.GetString("Error.FailedToStartProcess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 Insert Hook Code Failed 的當地語系化字串。
         /// </summary>
         public static string Error_InsertHookCodeFailed {

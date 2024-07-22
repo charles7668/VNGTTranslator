@@ -124,6 +124,12 @@
   <data name="Error.CanNotCaptureImage" xml:space="preserve">
     <value>Can't capture image</value>
   </data>
+  <data name="Error.ExecutionFileNotFound" xml:space="preserve">
+    <value>Execution file is not found</value>
+  </data>
+  <data name="Error.FailedToStartProcess" xml:space="preserve">
+    <value>Failed to start process</value>
+  </data>
   <data name="Error.InsertHookCodeFailed" xml:space="preserve">
     <value>Insert Hook Code Failed</value>
   </data>

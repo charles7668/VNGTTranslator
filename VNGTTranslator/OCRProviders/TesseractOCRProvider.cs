@@ -12,6 +12,7 @@ using VNGTTranslator.Enums;
 using VNGTTranslator.Helper;
 using VNGTTranslator.Models;
 using VNGTTranslator.OCRProviders.SettingPages;
+using Localization = VNGTTranslator.Properties.Localization;
 using Window = System.Windows.Window;
 
 namespace VNGTTranslator.OCRProviders
@@ -50,7 +51,7 @@ namespace VNGTTranslator.OCRProviders
             string executionFilePath = Path.Join(tesseractPath, "tesseract.exe");
             if (!File.Exists(executionFilePath))
             {
-                return Result<string>.Fail("Tesseract execution file is not found");
+                return Result<string>.Fail("Tesseract : " + Localization.Error_ExecutionFileNotFound);
             }
 
             // generate hash value
@@ -70,7 +71,7 @@ namespace VNGTTranslator.OCRProviders
             if (process == null)
             {
                 await FileHelper.DeleteIfExistAsync(tempFile);
-                return Result<string>.Fail("Failed to start tesseract process");
+                return Result<string>.Fail(Localization.Error_FailedToStartProcess + " : Tesseract");
             }
 
             string output = await process.StandardOutput.ReadToEndAsync();

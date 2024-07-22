@@ -124,6 +124,12 @@
   <data name="Error.CanNotCaptureImage" xml:space="preserve">
     <value>无法获取影像</value>
   </data>
+  <data name="Error.ExecutionFileNotFound" xml:space="preserve">
+    <value>未找到执行档</value>
+  </data>
+  <data name="Error.FailedToStartProcess" xml:space="preserve">
+    <value>无法启动进程</value>
+  </data>
   <data name="Error.InsertHookCodeFailed" xml:space="preserve">
     <value>插入Hook Code失败</value>
   </data>
