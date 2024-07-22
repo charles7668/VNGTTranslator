@@ -21,7 +21,13 @@ namespace VNGTTranslator.TranslateProviders.Google
     {
         public GoogleTranslateProvider()
         {
-            _setting = _appConfigProvider.GetTranslatorProviderConfig(ProviderName);
+            Dictionary<string, object> settings = null!;
+            Task.Run(async () =>
+            {
+                settings = await _appConfigProvider.GetTranslatorProviderConfigAsync(ProviderName)
+                    .ConfigureAwait(false);
+            }).Wait();
+            _setting = settings ?? [];
         }
 
         private const string IS_USE_PROXY_SETTING_STRING = "IsProxyUse";

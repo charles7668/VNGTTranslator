@@ -24,7 +24,7 @@ namespace VNGTTranslator.Configs
         /// <returns>
         /// if no configuration is found, an empty dictionary is returned.
         /// </returns>
-        public Dictionary<string, object> GetTranslatorProviderConfig(string providerName);
+        public Task<Dictionary<string, object>> GetTranslatorProviderConfigAsync(string providerName);
 
         /// <summary>
         /// save the configuration for a specific translator provider.
@@ -33,11 +33,10 @@ namespace VNGTTranslator.Configs
         /// <param name="config"></param>
         public Task<Result> SaveTranslatorProviderConfigAsync(string providerName, Dictionary<string, object> config);
 
-        public (TTSCommonSetting comonSetting, Dictionary<string, object> otherSettings) GetTTSProviderConfig(
-            string providerName);
+        public Task<Dictionary<string, object>> GetTTSProviderConfigAsync(string providerName);
 
-        public Task<Result> SaveTTSProviderConfigAsync(string providerName, TTSCommonSetting commonSetting,
-            Dictionary<string, object>? otherSettings = null);
+        public Task<Result> SaveTTSProviderConfigAsync(string providerName,
+            Dictionary<string, object>? config = null);
 
         public Task<Dictionary<string, object>> GetOCRProviderConfigAsync(string providerName);
 

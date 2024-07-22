@@ -1,9 +1,8 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using System.IO;
 using System.Text.Json;
-using System.Text.Json.Nodes;
+using VNGTTranslator.Helper;
 using VNGTTranslator.Models;
-using VNGTTranslator.TTSProviders;
 
 namespace VNGTTranslator.Configs
 {
@@ -12,41 +11,45 @@ namespace VNGTTranslator.Configs
         /// <summary>
         /// constructor
         /// </summary>
-        /// <param name="appConfigPath">config file path , if empty then store in memory</param>
+        /// <param name="appConfigFilePath">config file path , if empty then store in memory</param>
         /// <exception cref="JsonException"></exception>
-        public AppConfigProvider(string appConfigPath)
+        public AppConfigProvider(string appConfigFilePath)
         {
-            if (!string.IsNullOrEmpty(appConfigPath))
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(appConfigPath)!);
-                if (File.Exists(appConfigPath))
-                {
-                    string jsonString = File.ReadAllText(appConfigPath);
-                    AppConfig? config = JsonSerializer.Deserialize<AppConfig>(jsonString);
-                    _appConfig = config ?? throw new JsonException("Invalid app config file");
-                }
-                else
-                {
-                    _appConfig = new AppConfig();
-                }
+            if (string.IsNullOrEmpty(appConfigFilePath))
+                throw new ArgumentException(@"path is empty", nameof(appConfigFilePath));
 
-                _memoryCache = new MemoryCache(new MemoryCacheOptions
-                {
-                    SizeLimit = 20
-                });
+            if (!PathHelper.IsValidPath(appConfigFilePath))
+                throw new ArgumentException(@"invalid path", nameof(appConfigFilePath));
+
+            string? directoryName = Path.GetDirectoryName(appConfigFilePath);
+            if (!string.IsNullOrEmpty(directoryName))
+                Directory.CreateDirectory(directoryName);
+
+            if (File.Exists(appConfigFilePath))
+            {
+                string jsonString = File.ReadAllText(appConfigFilePath);
+                AppConfig? config = JsonSerializer.Deserialize<AppConfig>(jsonString);
+                _appConfig = config ?? throw new JsonException("Invalid app config file");
             }
             else
             {
                 _appConfig = new AppConfig();
-                _memoryCache = new MemoryCache(new MemoryCacheOptions());
             }
 
-            _appConfigPath = appConfigPath;
+            _memoryCache = new MemoryCache(new MemoryCacheOptions
+            {
+                SizeLimit = 20
+            });
+
+            _appConfigFilePath = Path.GetFullPath(appConfigFilePath);
+            _appConfigDirectory = Path.GetDirectoryName(_appConfigFilePath)!;
         }
 
         private readonly AppConfig _appConfig;
 
-        private readonly string _appConfigPath;
+        private readonly string _appConfigDirectory;
+
+        private readonly string _appConfigFilePath;
 
         private readonly IMemoryCache _memoryCache;
 
@@ -55,30 +58,22 @@ namespace VNGTTranslator.Configs
             return _appConfig;
         }
 
-        public Dictionary<string, object> GetTranslatorProviderConfig(string providerName)
+        public async Task<Dictionary<string, object>> GetTranslatorProviderConfigAsync(string providerName)
         {
             string cacheKey = $"translator:{providerName}";
-            if (_memoryCache.TryGetValue(cacheKey, out Dictionary<string, object>? config))
+            if (_memoryCache.TryGetValue(cacheKey, out Dictionary<string, object>? config)
+                && config != null)
             {
-                return config!;
+                return config;
             }
 
-            if (string.IsNullOrEmpty(_appConfigPath))
-            {
-                return new Dictionary<string, object>();
-            }
-
-            string? configFolder = Path.GetDirectoryName(_appConfigPath);
-            if (configFolder == null)
-                return new Dictionary<string, object>();
-            configFolder = Path.Combine(configFolder, "translator");
+            string configFolder = Path.Combine(_appConfigDirectory, "translator");
             string configFile = Path.Combine(configFolder, $"{providerName}.json");
             if (!File.Exists(configFile))
-                return new Dictionary<string, object>();
-            string jsonString = File.ReadAllText(configFile);
+                return [];
+            string jsonString = await File.ReadAllTextAsync(configFile);
             config = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonString);
-            if (config == null)
-                return new Dictionary<string, object>();
+            config ??= new Dictionary<string, object>();
             _memoryCache.Set(cacheKey, config, new MemoryCacheEntryOptions
             {
                 Size = 1
@@ -90,106 +85,68 @@ namespace VNGTTranslator.Configs
             Dictionary<string, object> config)
         {
             string cacheKey = $"translator:{providerName}";
-            if (string.IsNullOrEmpty(_appConfigPath))
+            try
             {
+                string configFolder = Path.Combine(_appConfigDirectory, "translator");
+                Directory.CreateDirectory(configFolder);
+                string configFile = Path.Combine(configFolder, $"{providerName}.json");
+                string writeString = JsonSerializer.Serialize(config);
+                await File.WriteAllTextAsync(configFile, writeString);
                 _memoryCache.Set(cacheKey, config, new MemoryCacheEntryOptions
                 {
                     Size = 1
                 });
             }
-            else
+            catch (Exception e)
             {
-                try
-                {
-                    string configFolder = Path.Combine(Path.GetDirectoryName(_appConfigPath)!, "translator");
-                    Directory.CreateDirectory(configFolder);
-                    string configFile = Path.Combine(configFolder, $"{providerName}.json");
-                    string writeString = JsonSerializer.Serialize(config);
-                    await File.WriteAllTextAsync(configFile, writeString);
-                    _memoryCache.Set(cacheKey, config, new MemoryCacheEntryOptions
-                    {
-                        Size = 1
-                    });
-                }
-                catch (Exception e)
-                {
-                    return Result.Fail(e.Message);
-                }
+                return Result.Fail(e.Message);
             }
 
             return Result.Success();
         }
 
-        public (TTSCommonSetting comonSetting, Dictionary<string, object> otherSettings) GetTTSProviderConfig(
-            string providerName)
+        public async Task<Dictionary<string, object>> GetTTSProviderConfigAsync(string providerName)
         {
             string cacheKey = $"tts:{providerName}";
-            if (_memoryCache.TryGetValue(cacheKey, out (TTSCommonSetting, Dictionary<string, object>) config))
+            if (_memoryCache.TryGetValue(cacheKey, out Dictionary<string, object>? config)
+                && config != null)
             {
                 return config;
             }
 
-            if (string.IsNullOrEmpty(_appConfigPath))
-            {
-                return (new TTSCommonSetting(), new Dictionary<string, object>());
-            }
-
-            string? configFolder = Path.GetDirectoryName(_appConfigPath);
-            if (configFolder == null)
-                return (new TTSCommonSetting(), new Dictionary<string, object>());
-            string configFile = Path.Combine(configFolder, "tts", $"{providerName}.json");
+            string configFile = Path.Combine(_appConfigDirectory, "tts", $"{providerName}.json");
             if (!File.Exists(configFile))
-                return (new TTSCommonSetting(), new Dictionary<string, object>());
-            string jsonString = File.ReadAllText(configFile);
-            JsonArray? deserialize = JsonSerializer.Deserialize<JsonArray>(jsonString);
-            if (deserialize == null)
-                return (new TTSCommonSetting(), new Dictionary<string, object>());
-            config = (deserialize[0].Deserialize<TTSCommonSetting>() ?? new TTSCommonSetting(),
-                deserialize[1].Deserialize<Dictionary<string, object>>() ?? []);
-            _memoryCache.Set(cacheKey, config, new MemoryCacheEntryOptions
+                return [];
+            string jsonString = await File.ReadAllTextAsync(configFile);
+            Dictionary<string, object>?
+                deserialize = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonString);
+            deserialize ??= [];
+            _memoryCache.Set(cacheKey, deserialize, new MemoryCacheEntryOptions
             {
                 Size = 1
             });
-            return config;
+            return deserialize;
         }
 
-        public async Task<Result> SaveTTSProviderConfigAsync(string providerName, TTSCommonSetting commonSetting,
-            Dictionary<string, object>? otherSettings = null)
+        public async Task<Result> SaveTTSProviderConfigAsync(string providerName,
+            Dictionary<string, object>? config = null)
         {
             string cacheKey = $"tts:{providerName}";
-            (TTSCommonSetting commonSetting, Dictionary<string, object> otherSettings) config = (commonSetting,
-                otherSettings ?? []);
-            if (string.IsNullOrEmpty(_appConfigPath))
+            try
             {
+                string configFolder = Path.Combine(_appConfigDirectory, "tts");
+                Directory.CreateDirectory(configFolder);
+                string configFile = Path.Combine(configFolder, $"{providerName}.json");
+                string writeString = JsonSerializer.Serialize(config);
+                await File.WriteAllTextAsync(configFile, writeString);
                 _memoryCache.Set(cacheKey, config, new MemoryCacheEntryOptions
                 {
                     Size = 1
                 });
             }
-            else
+            catch (Exception e)
             {
-                try
-                {
-                    string configFolder = Path.GetDirectoryName(_appConfigPath)!;
-                    configFolder = Path.Combine(configFolder, "tts");
-                    Directory.CreateDirectory(configFolder);
-                    string configFile = Path.Combine(configFolder, $"{providerName}.json");
-                    var jArray = new JsonArray
-                    {
-                        config.commonSetting,
-                        config.otherSettings
-                    };
-                    string writeString = JsonSerializer.Serialize(jArray);
-                    await File.WriteAllTextAsync(configFile, writeString);
-                    _memoryCache.Set(cacheKey, config, new MemoryCacheEntryOptions
-                    {
-                        Size = 1
-                    });
-                }
-                catch (Exception e)
-                {
-                    return Result.Fail(e.Message);
-                }
+                return Result.Fail(e.Message);
             }
 
             return Result.Success();
@@ -204,22 +161,13 @@ namespace VNGTTranslator.Configs
                 return config;
             }
 
-            if (string.IsNullOrEmpty(_appConfigPath))
-            {
-                return new Dictionary<string, object>();
-            }
-
-            string? configFolder = Path.GetDirectoryName(_appConfigPath);
-            if (configFolder == null)
-                return new Dictionary<string, object>();
-            string configFile = Path.Combine(configFolder, "ocr", $"{providerName}.json");
+            string configFile = Path.Combine(_appConfigDirectory, "ocr", $"{providerName}.json");
             if (!File.Exists(configFile))
-                return new Dictionary<string, object>();
+                return [];
             string jsonString = await File.ReadAllTextAsync(configFile);
             Dictionary<string, object>?
                 deserialize = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonString);
-            if (deserialize == null)
-                return new Dictionary<string, object>();
+            deserialize ??= [];
             _memoryCache.Set(cacheKey, deserialize, new MemoryCacheEntryOptions
             {
                 Size = 1
@@ -230,31 +178,21 @@ namespace VNGTTranslator.Configs
         public async Task<Result> SaveOCRProviderConfigAsync(string providerName, Dictionary<string, object> config)
         {
             string cacheKey = $"ocr:{providerName}";
-            if (string.IsNullOrEmpty(_appConfigPath))
+            try
             {
+                string configFolder = Path.Combine(_appConfigDirectory, "ocr");
+                Directory.CreateDirectory(configFolder);
+                string configFile = Path.Combine(configFolder, $"{providerName}.json");
+                string writeString = JsonSerializer.Serialize(config);
+                await File.WriteAllTextAsync(configFile, writeString);
                 _memoryCache.Set(cacheKey, config, new MemoryCacheEntryOptions
                 {
                     Size = 1
                 });
             }
-            else
+            catch (Exception e)
             {
-                try
-                {
-                    string configFolder = Path.Combine(Path.GetDirectoryName(_appConfigPath)!, "ocr");
-                    Directory.CreateDirectory(configFolder);
-                    string configFile = Path.Combine(configFolder, $"{providerName}.json");
-                    string writeString = JsonSerializer.Serialize(config);
-                    await File.WriteAllTextAsync(configFile, writeString);
-                    _memoryCache.Set(cacheKey, config, new MemoryCacheEntryOptions
-                    {
-                        Size = 1
-                    });
-                }
-                catch (Exception e)
-                {
-                    return Result.Fail(e.Message);
-                }
+                return Result.Fail(e.Message);
             }
 
             return Result.Success();
@@ -262,15 +200,10 @@ namespace VNGTTranslator.Configs
 
         public Result TrySaveAppConfig()
         {
-            if (string.IsNullOrEmpty(_appConfigPath))
-            {
-                return Result.Success();
-            }
-
             try
             {
                 string jsonString = JsonSerializer.Serialize(_appConfig);
-                File.WriteAllText(_appConfigPath, jsonString);
+                File.WriteAllText(_appConfigFilePath, jsonString);
                 return Result.Success();
             }
             catch (Exception e)

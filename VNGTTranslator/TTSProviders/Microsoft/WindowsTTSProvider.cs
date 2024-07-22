@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Speech.Synthesis;
+using System.Text.Json;
 using VNGTTranslator.Configs;
 using VNGTTranslator.Models;
 
@@ -23,10 +24,22 @@ namespace VNGTTranslator.TTSProviders.Microsoft
 
             _appConfigProvider = Program.ServiceProvider.GetRequiredService<IAppConfigProvider>();
             ReadOnlyCollection<InstalledVoice>? installedVoices = _speechSynthesizer.GetInstalledVoices();
-            (TTSCommonSetting comonSetting, Dictionary<string, object> otherSettings) configs =
-                _appConfigProvider.GetTTSProviderConfig(ProviderName);
-            _commonSetting = configs.comonSetting;
-            _otherSettings = configs.otherSettings;
+            Dictionary<string, object> configs = null!;
+            Task.Run(async () =>
+            {
+                configs = await _appConfigProvider.GetTTSProviderConfigAsync(ProviderName).ConfigureAwait(false);
+            }).Wait();
+            configs ??= [];
+            configs.TryGetValue(COMMON_SETTING_KEY, out object? commonSetting);
+            if (commonSetting is JsonElement commonSettingJson)
+                _commonSetting = commonSettingJson.Deserialize<TTSCommonSetting>() ?? new TTSCommonSetting();
+            else
+                _commonSetting = (TTSCommonSetting?)commonSetting ?? new TTSCommonSetting();
+            configs.TryGetValue(OTHER_SETTING_KEY, out object? otherSettings);
+            if (otherSettings is JsonElement otherSettingJson)
+                _otherSettings = otherSettingJson.Deserialize<Dictionary<string, object>>() ?? [];
+            else
+                _otherSettings = (Dictionary<string, object>?)otherSettings ?? [];
 
             foreach (InstalledVoice installedVoice in installedVoices)
             {
@@ -41,6 +54,8 @@ namespace VNGTTranslator.TTSProviders.Microsoft
             Volume = _commonSetting.Volume;
         }
 
+        private const string COMMON_SETTING_KEY = "commonSetting";
+        private const string OTHER_SETTING_KEY = "otherSettings";
         private readonly IAppConfigProvider _appConfigProvider;
 
         private readonly TTSCommonSetting _commonSetting;
@@ -102,7 +117,12 @@ namespace VNGTTranslator.TTSProviders.Microsoft
 
         public Task<Result> StoreSettingsAsync()
         {
-            return _appConfigProvider.SaveTTSProviderConfigAsync(ProviderName, _commonSetting, _otherSettings);
+            Dictionary<string, object> configs = new()
+            {
+                [COMMON_SETTING_KEY] = _commonSetting,
+                [OTHER_SETTING_KEY] = _otherSettings
+            };
+            return _appConfigProvider.SaveTTSProviderConfigAsync(ProviderName, configs);
         }
 
         public void StopSpeak()
