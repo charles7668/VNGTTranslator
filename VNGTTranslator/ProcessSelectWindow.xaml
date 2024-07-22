@@ -7,9 +7,10 @@
         xmlns:vngtTranslator="clr-namespace:VNGTTranslator"
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         xmlns:converters="clr-namespace:VNGTTranslator.Converters"
+        xmlns:p="clr-namespace:VNGTTranslator.Properties"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vngtTranslator:ProcessSelectWindow}"
-        Title="Process Selection Window" Height="600" Width="800">
+        Title="{x:Static p:Localization.ProcessSelectWindow_SelectProcessWindowHeader}" Height="600" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -17,18 +18,20 @@
         </Grid.RowDefinitions>
         <StackPanel>
             <hc:TabControl Background="Blue" SelectedIndex="{Binding SelectedMode}" IsTabFillEnabled="True">
-                <hc:TabItem FontSize="20" Header="Hook Mode" Background="Lime">
+                <hc:TabItem FontSize="20" Header="{x:Static p:Localization.ProcessSelectWindow_HookMode}"
+                            Background="Lime">
                     <StackPanel Background="White">
                         <hc:ComboBox Style="{StaticResource ComboBoxExtend}"
                                      ItemsSource="{Binding ProcessList}"
                                      SelectedItem="{Binding SelectedProcess , Mode=TwoWay}"
-                                     hc:InfoElement.Title="Choose Game Process"
+                                     hc:InfoElement.Title="{x:Static p:Localization.ProcessSelectWindow_SelectGameProcess}"
                                      hc:TitleElement.TitlePlacement="Top"
                                      FontSize="15"
                                      VerticalAlignment="Center" />
                     </StackPanel>
                 </hc:TabItem>
-                <hc:TabItem FontSize="20" Header="OCR Mode" Background="Lime">
+                <hc:TabItem FontSize="20" Header="{x:Static p:Localization.ProcessSelectWindow_OCRMode}"
+                            Background="Lime">
                     <StackPanel Background="White">
                         <StackPanel.Resources>
                             <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
@@ -45,7 +48,8 @@
                         </StackPanel.Resources>
                         <CheckBox IsChecked="{Binding IsUseScreen}"
                                   Margin="5"
-                                  FontSize="20" FontWeight="Bold" Content="Use Screen" />
+                                  FontSize="20" FontWeight="Bold"
+                                  Content="{x:Static p:Localization.ProcessSelectWindow_OCRMode_UseScreenshot}" />
                         <Button Name="BtnDragToTarget"
                                 PreviewMouseDown="BtnDragToTarget_OnMouseDown"
                                 PreviewMouseUp="BtnDragToTarget_OnMouseUp">
@@ -62,8 +66,10 @@
                             <Button.Content>
                                 <hc:SimpleStackPanel Orientation="Horizontal">
                                     <fa:IconBlock Icon="Plus" FontSize="20" />
-                                    <TextBlock Text="Drag to target window" FontWeight="Bold" FontSize="20"
-                                               VerticalAlignment="Center" />
+                                    <TextBlock
+                                        Text="{x:Static p:Localization.ProcessSelectWindow_OCRMode_DragToTargetWindow}"
+                                        FontWeight="Bold" FontSize="20"
+                                        VerticalAlignment="Center" />
                                 </hc:SimpleStackPanel>
                             </Button.Content>
                         </Button>
@@ -71,27 +77,30 @@
                                    d:Text="Target : Test"
                                    Text="{Binding DisplayCurrentOcrTarget}" />
                         <hc:SimpleStackPanel Orientation="Horizontal">
-                            <Button Content="Select Region" Click="BtnSelectRegion_OnClick" />
-                            <Button Content="Refresh Region" Click="BtnRefresh_OnClick" />
+                            <Button Content="{x:Static p:Localization.ProcessSelectWindow_OCRMode_SelectRegion}"
+                                    Click="BtnSelectRegion_OnClick" />
+                            <Button Content="{x:Static p:Localization.ProcessSelectWindow_OCRMode_RefreshSelectRegion}"
+                                    Click="BtnRefresh_OnClick" />
                         </hc:SimpleStackPanel>
                         <Image Height="200" Source="{Binding PreviewImage}" />
                         <hc:SimpleStackPanel Orientation="Horizontal" Margin="0,5,0,5">
                             <hc:ComboBox hc:TitleElement.TitlePlacement="Left"
-                                         hc:TitleElement.Title="Language"
+                                         hc:TitleElement.Title="{x:Static p:Localization.ProcessSelectWindow_OCRMode_OCRLanguage}"
                                          ItemsSource="{Binding OCRLangList , Converter={StaticResource LanguageStringConverter}}"
                                          SelectedItem="{Binding SelectedOCRLanguage , Converter={StaticResource LanguageStringConverter}}" />
                             <hc:ComboBox hc:TitleElement.TitlePlacement="Left"
-                                         hc:TitleElement.Title="PreProcess"
+                                         hc:TitleElement.Title="{x:Static p:Localization.ProcessSelectWindow_OCRMode_PreProcess}"
                                          ItemsSource="{Binding PreProcessFuncList , Converter={StaticResource ImagePreProcessFuncToStringConverter}}"
                                          SelectedItem="{Binding SelectedPreProcessFunc , Converter={StaticResource ImagePreProcessFuncToStringConverter}}" />
-                            <Button Content="Test OCR" Click="BtnTestOCR_OnClick" />
+                            <Button Content="{x:Static p:Localization.ProcessSelectWindow_OCRMode_TestOCR}"
+                                    Click="BtnTestOCR_OnClick" />
                         </hc:SimpleStackPanel>
                     </StackPanel>
                 </hc:TabItem>
             </hc:TabControl>
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Save" Click="BtnSave_OnClick">
+            <Button Content="{x:Static p:Localization.Button_Save}" Click="BtnSave_OnClick">
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource ButtonPrimary}">
                         <Setter Property="FontSize" Value="20" />
@@ -101,7 +110,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button Content="Close" Click="BtnClose_OnClick">
+            <Button Content="{x:Static p:Localization.Button_Close}" Click="BtnClose_OnClick">
                 <Button.Style>
                     <Style TargetType="Button" BasedOn="{StaticResource ButtonDanger}">
                         <Setter Property="FontSize" Value="20" />

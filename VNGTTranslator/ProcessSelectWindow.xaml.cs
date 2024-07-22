@@ -87,7 +87,7 @@ namespace VNGTTranslator
 
         public string DisplayCurrentOcrTarget
         {
-            get => "Target Window: " + _currentOCRTargetWindow;
+            get => Properties.Localization.ProcessSelectWindow_OCRMode_TargetWindow + ": " + _currentOCRTargetWindow;
             private set => SetField(ref _currentOCRTargetWindow, value);
         }
 

@@ -112,6 +112,12 @@
   <data name="AppSettingPage.Text.DisplayLanguage" xml:space="preserve">
     <value>Display Language(Effective after restart)</value>
   </data>
+  <data name="Button.Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Button.Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
   <data name="ColorPicker.Text.Title" xml:space="preserve">
     <value>Select Color</value>
   </data>
@@ -147,6 +153,42 @@
   </data>
   <data name="HookSelectWindow.Text.Title" xml:space="preserve">
     <value>Select Hook Code</value>
+  </data>
+  <data name="ProcessSelectWindow.HookMode" xml:space="preserve">
+    <value>Hook Mode</value>
+  </data>
+  <data name="ProcessSelectWindow.OCRMode" xml:space="preserve">
+    <value>OCR Mode</value>
+  </data>
+  <data name="ProcessSelectWindow.OCRMode.DragToTargetWindow" xml:space="preserve">
+    <value>Drag to the target window</value>
+  </data>
+  <data name="ProcessSelectWindow.OCRMode.OCRLanguage" xml:space="preserve">
+    <value>OCR Language</value>
+  </data>
+  <data name="ProcessSelectWindow.OCRMode.PreProcess" xml:space="preserve">
+    <value>PreProcess</value>
+  </data>
+  <data name="ProcessSelectWindow.OCRMode.RefreshSelectRegion" xml:space="preserve">
+    <value>Refresh Region</value>
+  </data>
+  <data name="ProcessSelectWindow.OCRMode.SelectRegion" xml:space="preserve">
+    <value>Select Region</value>
+  </data>
+  <data name="ProcessSelectWindow.OCRMode.TargetWindow" xml:space="preserve">
+    <value>Target Window</value>
+  </data>
+  <data name="ProcessSelectWindow.OCRMode.TestOCR" xml:space="preserve">
+    <value>Test OCR</value>
+  </data>
+  <data name="ProcessSelectWindow.OCRMode.UseScreenshot" xml:space="preserve">
+    <value>Use Screenshot</value>
+  </data>
+  <data name="ProcessSelectWindow.SelectGameProcess" xml:space="preserve">
+    <value>Select Game Process</value>
+  </data>
+  <data name="ProcessSelectWindow.SelectProcessWindowHeader" xml:space="preserve">
+    <value>Select Process</value>
   </data>
   <data name="ProxySettingPage.Text.Proxy" xml:space="preserve">
     <value>Proxy</value>

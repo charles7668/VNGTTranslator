@@ -106,6 +106,24 @@ namespace VNGTTranslator.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 Close 的當地語系化字串。
+        /// </summary>
+        public static string Button_Close {
+            get {
+                return ResourceManager.GetString("Button.Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Save 的當地語系化字串。
+        /// </summary>
+        public static string Button_Save {
+            get {
+                return ResourceManager.GetString("Button.Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 Select Color 的當地語系化字串。
         /// </summary>
         public static string ColorPicker_Text_Title {
@@ -210,6 +228,114 @@ namespace VNGTTranslator.Properties {
         public static string HookSelectWindow_Text_Title {
             get {
                 return ResourceManager.GetString("HookSelectWindow.Text.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Hook Mode 的當地語系化字串。
+        /// </summary>
+        public static string ProcessSelectWindow_HookMode {
+            get {
+                return ResourceManager.GetString("ProcessSelectWindow.HookMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 OCR Mode 的當地語系化字串。
+        /// </summary>
+        public static string ProcessSelectWindow_OCRMode {
+            get {
+                return ResourceManager.GetString("ProcessSelectWindow.OCRMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Drag to the target window 的當地語系化字串。
+        /// </summary>
+        public static string ProcessSelectWindow_OCRMode_DragToTargetWindow {
+            get {
+                return ResourceManager.GetString("ProcessSelectWindow.OCRMode.DragToTargetWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 OCR Language 的當地語系化字串。
+        /// </summary>
+        public static string ProcessSelectWindow_OCRMode_OCRLanguage {
+            get {
+                return ResourceManager.GetString("ProcessSelectWindow.OCRMode.OCRLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 PreProcess 的當地語系化字串。
+        /// </summary>
+        public static string ProcessSelectWindow_OCRMode_PreProcess {
+            get {
+                return ResourceManager.GetString("ProcessSelectWindow.OCRMode.PreProcess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Refresh Region 的當地語系化字串。
+        /// </summary>
+        public static string ProcessSelectWindow_OCRMode_RefreshSelectRegion {
+            get {
+                return ResourceManager.GetString("ProcessSelectWindow.OCRMode.RefreshSelectRegion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Select Region 的當地語系化字串。
+        /// </summary>
+        public static string ProcessSelectWindow_OCRMode_SelectRegion {
+            get {
+                return ResourceManager.GetString("ProcessSelectWindow.OCRMode.SelectRegion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Target Window 的當地語系化字串。
+        /// </summary>
+        public static string ProcessSelectWindow_OCRMode_TargetWindow {
+            get {
+                return ResourceManager.GetString("ProcessSelectWindow.OCRMode.TargetWindow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Test OCR 的當地語系化字串。
+        /// </summary>
+        public static string ProcessSelectWindow_OCRMode_TestOCR {
+            get {
+                return ResourceManager.GetString("ProcessSelectWindow.OCRMode.TestOCR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Use Screenshot 的當地語系化字串。
+        /// </summary>
+        public static string ProcessSelectWindow_OCRMode_UseScreenshot {
+            get {
+                return ResourceManager.GetString("ProcessSelectWindow.OCRMode.UseScreenshot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Select Game Process 的當地語系化字串。
+        /// </summary>
+        public static string ProcessSelectWindow_SelectGameProcess {
+            get {
+                return ResourceManager.GetString("ProcessSelectWindow.SelectGameProcess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Select Process 的當地語系化字串。
+        /// </summary>
+        public static string ProcessSelectWindow_SelectProcessWindowHeader {
+            get {
+                return ResourceManager.GetString("ProcessSelectWindow.SelectProcessWindowHeader", resourceCulture);
             }
         }
         
