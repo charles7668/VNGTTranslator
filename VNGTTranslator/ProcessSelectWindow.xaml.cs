@@ -27,7 +27,6 @@ namespace VNGTTranslator
         {
             ProcessList = GetProcessList();
             InitializeComponent();
-            Topmost = true;
             SelectedProcess = ProcessList.FirstOrDefault(x => x.EndsWith(Program.PID.ToString()));
             _selectedMode = Program.Mode;
             _isUseScreen = Program.OCRSetting.IsUseScreen;

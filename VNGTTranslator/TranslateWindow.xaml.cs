@@ -175,6 +175,8 @@ namespace VNGTTranslator
 
         private void BtnHistory_OnClick(object sender, RoutedEventArgs e)
         {
+            bool onTopBackup = Topmost;
+            Topmost = false;
             var textbox = new TextBox
             {
                 Text = _history.ToString(),
@@ -196,9 +198,9 @@ namespace VNGTTranslator
                 Title = Localization.HistoryWindow_Text_Title
             };
             _hooker.OnHookTextReceived -= OnHookerTextReceived;
-            window.Topmost = true;
             window.ShowDialog();
             _hooker.OnHookTextReceived += OnHookerTextReceived;
+            Topmost = onTopBackup;
         }
 
         private void BtnLock_OnClick(object sender, RoutedEventArgs e)
@@ -248,16 +250,21 @@ namespace VNGTTranslator
 
         private void BtnSelectHookCode_OnClick(object sender, RoutedEventArgs e)
         {
+            bool onTopBackup = Topmost;
+            Topmost = false;
             HookSelectWindow hookSelectWindow = new();
             _hooker.OnHookTextReceived -= OnHookerTextReceived;
             hookSelectWindow.ShowDialog();
             if (Program.SelectedHookItem != null)
                 SourceText = Localization.TranslateWindow_Text_WaitSourceText;
             _hooker.OnHookTextReceived += OnHookerTextReceived;
+            Topmost = onTopBackup;
         }
 
         private void BtnSelectProcess_OnClick(object sender, RoutedEventArgs e)
         {
+            bool onTopBackup = Topmost;
+            Topmost = false;
             ProcessSelectWindow processSelectWindow = new()
             {
                 Owner = this,
@@ -282,10 +289,13 @@ namespace VNGTTranslator
                 _ocrRefreshTimer?.Dispose();
                 _ocrRefreshTimer = null;
             }
+            Topmost = onTopBackup;
         }
 
         private void BtnSetting_OnClick(object sender, RoutedEventArgs e)
         {
+            bool onTopBackup = Topmost;
+            Topmost = false;
             SettingWindow settingWindow = new()
             {
                 Owner = this
@@ -295,6 +305,7 @@ namespace VNGTTranslator
             _hooker.OnHookTextReceived += OnHookerTextReceived;
             RefreshDisplayUI();
             UpdateTTSProvider();
+            Topmost = onTopBackup;
         }
 
         private void BtnShowSourceText_OnClick(object sender, RoutedEventArgs e)

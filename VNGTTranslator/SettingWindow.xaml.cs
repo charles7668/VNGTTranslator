@@ -15,7 +15,6 @@ namespace VNGTTranslator
             InitializeComponent();
             DataContext = this;
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            Topmost = true;
         }
 
         private Uri _navigateTo = new("SettingPages/About.xaml", UriKind.Relative);

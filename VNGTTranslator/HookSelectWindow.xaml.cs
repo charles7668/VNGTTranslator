@@ -16,7 +16,6 @@ namespace VNGTTranslator
         public HookSelectWindow()
         {
             InitializeComponent();
-            Topmost = true;
             DataContext = this;
         }
 
