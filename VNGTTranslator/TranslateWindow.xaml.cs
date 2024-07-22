@@ -83,7 +83,7 @@ namespace VNGTTranslator
         private DateTime _previousTranslateTime = new(2000, 01, 01);
         private CancellationTokenSource _processMonitorCancellationTokenSource = new();
 
-        private Thread _processMonitorThread = null!;
+        private Thread? _processMonitorThread;
 
         private FontFamily _sourceFontFamily = new("Arial");
 
@@ -352,7 +352,7 @@ namespace VNGTTranslator
             if (!PauseState)
                 _hooker.OnHookTextReceived -= OnHookerTextReceived;
             _processMonitorCancellationTokenSource.Cancel();
-            while (_processMonitorThread.IsAlive)
+            while (_processMonitorThread != null && _processMonitorThread.IsAlive)
             {
                 Thread.Sleep(10);
             }
