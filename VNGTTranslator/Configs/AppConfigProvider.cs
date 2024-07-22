@@ -38,12 +38,17 @@ namespace VNGTTranslator.Configs
                 {
                     SizeLimit = 20
                 });
+                _ocrProviderConfigCache = new MemoryCache(new MemoryCacheOptions
+                {
+                    SizeLimit = 20
+                });
             }
             else
             {
                 _appConfig = new AppConfig();
                 _translateProviderConfigCache = new MemoryCache(new MemoryCacheOptions());
                 _ttsProviderConfigCache = new MemoryCache(new MemoryCacheOptions());
+                _ocrProviderConfigCache = new MemoryCache(new MemoryCacheOptions());
             }
 
             _appConfigPath = appConfigPath;
@@ -52,6 +57,7 @@ namespace VNGTTranslator.Configs
         private readonly AppConfig _appConfig;
 
         private readonly string _appConfigPath;
+        private readonly IMemoryCache _ocrProviderConfigCache;
 
         private readonly IMemoryCache _translateProviderConfigCache;
         private readonly IMemoryCache _ttsProviderConfigCache;
@@ -84,7 +90,7 @@ namespace VNGTTranslator.Configs
             config = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonString);
             if (config == null)
                 return new Dictionary<string, object>();
-            _translateProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions()
+            _translateProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions
             {
                 Size = 1
             });
@@ -96,7 +102,7 @@ namespace VNGTTranslator.Configs
         {
             if (string.IsNullOrEmpty(_appConfigPath))
             {
-                _translateProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions()
+                _translateProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions
                 {
                     Size = 1
                 });
@@ -110,7 +116,7 @@ namespace VNGTTranslator.Configs
                     string configFile = Path.Combine(configFolder, $"{providerName}.json");
                     string writeString = JsonSerializer.Serialize(config);
                     await File.WriteAllTextAsync(configFile, writeString);
-                    _translateProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions()
+                    _translateProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions
                     {
                         Size = 1
                     });
@@ -150,7 +156,7 @@ namespace VNGTTranslator.Configs
                 return (new TTSCommonSetting(), new Dictionary<string, object>());
             config = (deserialize[0].Deserialize<TTSCommonSetting>() ?? new TTSCommonSetting(),
                 deserialize[1].Deserialize<Dictionary<string, object>>() ?? []);
-            _ttsProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions()
+            _ttsProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions
             {
                 Size = 1
             });
@@ -164,7 +170,7 @@ namespace VNGTTranslator.Configs
                 otherSettings ?? []);
             if (string.IsNullOrEmpty(_appConfigPath))
             {
-                _ttsProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions()
+                _ttsProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions
                 {
                     Size = 1
                 });
@@ -184,7 +190,70 @@ namespace VNGTTranslator.Configs
                     };
                     string writeString = JsonSerializer.Serialize(jArray);
                     await File.WriteAllTextAsync(configFile, writeString);
-                    _ttsProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions()
+                    _ttsProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions
+                    {
+                        Size = 1
+                    });
+                }
+                catch (Exception e)
+                {
+                    return Result.Fail(e.Message);
+                }
+            }
+
+            return Result.Success();
+        }
+
+        public async Task<Dictionary<string, object>> GetOCRProviderConfigAsync(string providerName)
+        {
+            if (_ocrProviderConfigCache.TryGetValue(providerName,
+                    out Dictionary<string, object>? config) && config != null)
+            {
+                return config;
+            }
+
+            if (string.IsNullOrEmpty(_appConfigPath))
+            {
+                return new Dictionary<string, object>();
+            }
+
+            string? configFolder = Path.GetDirectoryName(_appConfigPath);
+            if (configFolder == null)
+                return new Dictionary<string, object>();
+            string configFile = Path.Combine(configFolder, "ocr", $"{providerName}.json");
+            if (!File.Exists(configFile))
+                return new Dictionary<string, object>();
+            string jsonString = await File.ReadAllTextAsync(configFile);
+            Dictionary<string, object>?
+                deserialize = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonString);
+            if (deserialize == null)
+                return new Dictionary<string, object>();
+            _ocrProviderConfigCache.Set(providerName, deserialize, new MemoryCacheEntryOptions
+            {
+                Size = 1
+            });
+            return deserialize;
+        }
+
+        public async Task<Result> SaveOCRProviderConfigAsync(string providerName, Dictionary<string, object> config)
+        {
+            if (string.IsNullOrEmpty(_appConfigPath))
+            {
+                _ocrProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions
+                {
+                    Size = 1
+                });
+            }
+            else
+            {
+                try
+                {
+                    string configFolder = Path.Combine(Path.GetDirectoryName(_appConfigPath)!, "ocr");
+                    Directory.CreateDirectory(configFolder);
+                    string configFile = Path.Combine(configFolder, $"{providerName}.json");
+                    string writeString = JsonSerializer.Serialize(config);
+                    await File.WriteAllTextAsync(configFile, writeString);
+                    _ocrProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions
                     {
                         Size = 1
                     });

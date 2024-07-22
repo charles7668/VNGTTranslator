@@ -38,5 +38,9 @@ namespace VNGTTranslator.Configs
 
         public Task<Result> SaveTTSProviderConfigAsync(string providerName, TTSCommonSetting commonSetting,
             Dictionary<string, object>? otherSettings = null);
+
+        public Task<Dictionary<string, object>> GetOCRProviderConfigAsync(string providerName);
+
+        public Task<Result> SaveOCRProviderConfigAsync(string providerName, Dictionary<string, object> config);
     }
 }

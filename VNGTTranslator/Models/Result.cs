@@ -17,16 +17,6 @@
         private bool IsSuccess { get; }
         public string ErrorMessage { get; set; }
 
-        public static implicit operator bool(Result<T> result)
-        {
-            return result.IsSuccess;
-        }
-
-        public static Result<T> Success(T value)
-        {
-            return new Result<T>(value, true, string.Empty);
-        }
-
         public static Result<T> Fail(string errorMessage)
         {
             return new Result<T>(default, false, errorMessage);
@@ -35,6 +25,16 @@
         public static Result<T> Fail(T value, string errorMessage)
         {
             return new Result<T>(value, false, errorMessage);
+        }
+
+        public static implicit operator bool(Result<T> result)
+        {
+            return result.IsSuccess;
+        }
+
+        public static Result<T> Success(T value)
+        {
+            return new Result<T>(value, true, string.Empty);
         }
     }
 
@@ -52,6 +52,11 @@
         private bool IsSuccess { get; }
         public string ErrorMessage { get; set; }
 
+        public static Result Fail(string errorMessage)
+        {
+            return new Result(false, errorMessage);
+        }
+
         public static implicit operator bool(Result result)
         {
             return result.IsSuccess;
@@ -60,11 +65,6 @@
         public static Result Success()
         {
             return new Result(true, string.Empty);
-        }
-
-        public static Result Fail(string errorMessage)
-        {
-            return new Result(false, errorMessage);
         }
     }
 }

@@ -10,6 +10,7 @@ using Windows.Graphics.Imaging;
 using Windows.Media.Ocr;
 using Windows.Storage.Streams;
 using Language = Windows.Globalization.Language;
+using Window = System.Windows.Window;
 
 namespace VNGTTranslator.OCRProviders
 {
@@ -80,7 +81,7 @@ namespace VNGTTranslator.OCRProviders
             return Result.Success();
         }
 
-        public PopupWindow GetSettingWindow(Window parent)
+        public Task<PopupWindow> GetSettingWindowAsync(Window parent)
         {
             throw new NotSupportedException();
         }

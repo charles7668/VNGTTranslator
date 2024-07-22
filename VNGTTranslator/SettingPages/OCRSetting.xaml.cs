@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using HandyControl.Controls;
+using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -6,6 +7,7 @@ using System.Windows.Controls;
 using VNGTTranslator.Configs;
 using VNGTTranslator.Models;
 using VNGTTranslator.OCRProviders;
+using Window = System.Windows.Window;
 
 namespace VNGTTranslator.SettingPages
 {
@@ -46,9 +48,16 @@ namespace VNGTTranslator.SettingPages
             _serviceProvider.GetRequiredService<IAppConfigProvider>().TrySaveAppConfig();
         }
 
-        private void BtnOCRProviderSetting_OnClick(object sender, RoutedEventArgs e)
+        private async void BtnOCRProviderSetting_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (sender is not Button button)
+                return;
+            if (button.DataContext is not OCRProviderContext context)
+                return;
+            if (!context.IsSettingSupport)
+                return;
+            PopupWindow popUpWindow = await context.GetSettingWindow(Window.GetWindow(this)!);
+            popUpWindow.ShowDialog();
         }
 
         private void BtnProviderCheck_OnClick(object sender, RoutedEventArgs e)
@@ -103,6 +112,11 @@ namespace VNGTTranslator.SettingPages
             public bool IsSettingSupport => _provider.SupportSetting;
 
             public event PropertyChangedEventHandler? PropertyChanged;
+
+            public Task<PopupWindow> GetSettingWindow(Window parent)
+            {
+                return _provider.GetSettingWindowAsync(parent);
+            }
 
             protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
             {

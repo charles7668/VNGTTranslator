@@ -1,0 +1,27 @@
+﻿<Page x:Class="VNGTTranslator.OCRProviders.SettingPages.TesseractOCRSetting"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:hc="https://handyorg.github.io/handycontrol"
+      xmlns:settingPages="clr-namespace:VNGTTranslator.OCRProviders.SettingPages"
+      mc:Ignorable="d"
+      d:DesignHeight="450" d:DesignWidth="800"
+      d:DataContext="{d:DesignInstance settingPages:TesseractOCRSetting}"
+      MinHeight="200"
+      Background="White"
+      Title="TesseractOCRSetting">
+
+    <hc:SimpleStackPanel Margin="10">
+        <hc:SimpleStackPanel.Resources>
+            <Style TargetType="hc:TextBox" BasedOn="{StaticResource TextBoxPlusBaseStyle}">
+                <Setter Property="FontSize" Value="15" />
+                <Setter Property="FontWeight" Value="Bold" />
+            </Style>
+        </hc:SimpleStackPanel.Resources>
+        <hc:TextBox hc:TitleElement.Title="Tesseract Path:"
+                    hc:TitleElement.TitlePlacement="Left"
+                    Text="{Binding TesseractPath}"
+                    MinWidth="500" />
+    </hc:SimpleStackPanel>
+</Page>
