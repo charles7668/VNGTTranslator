@@ -41,9 +41,9 @@ namespace VNGTTranslator.SettingPages
 
         private readonly AppConfig _appConfig;
 
-        private readonly List<string> _fontList = new();
+        private readonly List<string> _fontList = [];
 
-        public string ProviderName { get; set; }
+        private string ProviderName { get; }
 
         public string DisplayTitle => "Translate Source : " + ProviderName;
 
@@ -107,19 +107,6 @@ namespace VNGTTranslator.SettingPages
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        private void SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(field, value))
-                return;
-            field = value;
-            OnPropertyChanged(propertyName);
-        }
-
         private void BtnSelectTextColor_OnClick(object sender, RoutedEventArgs e)
         {
             ColorPicker? picker = SingleOpenHelper.CreateControl<ColorPicker>();
@@ -146,6 +133,19 @@ namespace VNGTTranslator.SettingPages
             };
 
             window.Show();
+        }
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value))
+                return;
+            field = value;
+            OnPropertyChanged(propertyName);
         }
     }
 }
