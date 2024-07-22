@@ -154,6 +154,9 @@
   <data name="HookSelectWindow.Text.Title" xml:space="preserve">
     <value>選擇Hook Code</value>
   </data>
+  <data name="OCRSettingPage.SelectOCREngine" xml:space="preserve">
+    <value>選擇OCR引擎</value>
+  </data>
   <data name="ProcessSelectWindow.HookMode" xml:space="preserve">
     <value>鉤子模式</value>
   </data>
@@ -204,6 +207,9 @@
   </data>
   <data name="SettingWindow.Text.AppSetting" xml:space="preserve">
     <value>程式設定</value>
+  </data>
+  <data name="SettingWindow.Text.OCRSetting" xml:space="preserve">
+    <value>OCR設定</value>
   </data>
   <data name="SettingWindow.Text.ProxySetting" xml:space="preserve">
     <value>代理設定</value>

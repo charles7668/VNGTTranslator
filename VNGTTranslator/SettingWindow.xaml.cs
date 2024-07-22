@@ -28,16 +28,6 @@ namespace VNGTTranslator
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private void SideMenuItemTranslateWindowSetting_OnSelected(object sender, RoutedEventArgs e)
-        {
-            NavigateTo = new Uri("SettingPages/TranslateWindowSetting.xaml", UriKind.Relative);
-        }
-
-        private void SideMenuItemAbout_OnSelected(object sender, RoutedEventArgs e)
-        {
-            NavigateTo = new Uri("SettingPages/About.xaml", UriKind.Relative);
-        }
-
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -51,19 +41,15 @@ namespace VNGTTranslator
             OnPropertyChanged(propertyName);
         }
 
-        private void SideMenuItemTranslateSetting_OnSelected(object sender, RoutedEventArgs e)
+        private void SettingWindow_OnClosing(object? sender, CancelEventArgs e)
         {
-            NavigateTo = new Uri("SettingPages/TranslateSetting.xaml", UriKind.Relative);
+            if (FramePage.Content is ISaveable saveable)
+                saveable.Save();
         }
 
-        private void SideMenuItemProxySetting_OnSelected(object sender, RoutedEventArgs e)
+        private void SideMenuItemAbout_OnSelected(object sender, RoutedEventArgs e)
         {
-            NavigateTo = new Uri("SettingPages/ProxySetting.xaml", UriKind.Relative);
-        }
-
-        private void SideMenuItemTTSSetting_OnSelected(object sender, RoutedEventArgs e)
-        {
-            NavigateTo = new Uri("SettingPages/TTSSetting.xaml", UriKind.Relative);
+            NavigateTo = new Uri("SettingPages/About.xaml", UriKind.Relative);
         }
 
         private void SideMenuItemAppSetting_OnSelected(object sender, RoutedEventArgs e)
@@ -71,10 +57,29 @@ namespace VNGTTranslator
             NavigateTo = new Uri("SettingPages/AppSetting.xaml", UriKind.Relative);
         }
 
-        private void SettingWindow_OnClosing(object? sender, CancelEventArgs e)
+        private void SideMenuItemOCRSetting_OnSelected(object sender, RoutedEventArgs e)
         {
-            if (FramePage.Content is ISaveable saveable)
-                saveable.Save();
+            NavigateTo = new Uri("SettingPages/OCRSetting.xaml", UriKind.Relative);
+        }
+
+        private void SideMenuItemProxySetting_OnSelected(object sender, RoutedEventArgs e)
+        {
+            NavigateTo = new Uri("SettingPages/ProxySetting.xaml", UriKind.Relative);
+        }
+
+        private void SideMenuItemTranslateSetting_OnSelected(object sender, RoutedEventArgs e)
+        {
+            NavigateTo = new Uri("SettingPages/TranslateSetting.xaml", UriKind.Relative);
+        }
+
+        private void SideMenuItemTranslateWindowSetting_OnSelected(object sender, RoutedEventArgs e)
+        {
+            NavigateTo = new Uri("SettingPages/TranslateWindowSetting.xaml", UriKind.Relative);
+        }
+
+        private void SideMenuItemTTSSetting_OnSelected(object sender, RoutedEventArgs e)
+        {
+            NavigateTo = new Uri("SettingPages/TTSSetting.xaml", UriKind.Relative);
         }
     }
 }

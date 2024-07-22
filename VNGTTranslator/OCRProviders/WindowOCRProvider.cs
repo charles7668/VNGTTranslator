@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using HandyControl.Controls;
+using System.ComponentModel.Composition;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -30,6 +31,7 @@ namespace VNGTTranslator.OCRProviders
         private OcrEngine? _ocrEngine;
         private Language _ocrLanguage = new("en");
         public string ProviderName => "WindowOCR";
+        public bool SupportSetting { get; } = false;
 
         public async Task<Result<string>> RecognizeTextAsync(Bitmap originalImage,
             ImagePreProcessFunction preProcessFunc)
@@ -76,6 +78,11 @@ namespace VNGTTranslator.OCRProviders
             }
 
             return Result.Success();
+        }
+
+        public PopupWindow GetSettingWindow(Window parent)
+        {
+            throw new NotSupportedException();
         }
 
         private static OcrEngine InitOCREngine(Language lang)

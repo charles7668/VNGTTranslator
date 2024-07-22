@@ -232,6 +232,15 @@ namespace VNGTTranslator.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 Select OCR Engine 的當地語系化字串。
+        /// </summary>
+        public static string OCRSettingPage_SelectOCREngine {
+            get {
+                return ResourceManager.GetString("OCRSettingPage.SelectOCREngine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 Hook Mode 的當地語系化字串。
         /// </summary>
         public static string ProcessSelectWindow_HookMode {
@@ -381,6 +390,15 @@ namespace VNGTTranslator.Properties {
         public static string SettingWindow_Text_AppSetting {
             get {
                 return ResourceManager.GetString("SettingWindow.Text.AppSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 OCR Setting 的當地語系化字串。
+        /// </summary>
+        public static string SettingWindow_Text_OCRSetting {
+            get {
+                return ResourceManager.GetString("SettingWindow.Text.OCRSetting", resourceCulture);
             }
         }
         

@@ -69,4 +69,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="OCRProviders\SettingPages\" />
+  </ItemGroup>
+
 </Project>

@@ -154,6 +154,9 @@
   <data name="HookSelectWindow.Text.Title" xml:space="preserve">
     <value>Select Hook Code</value>
   </data>
+  <data name="OCRSettingPage.SelectOCREngine" xml:space="preserve">
+    <value>Select OCR Engine</value>
+  </data>
   <data name="ProcessSelectWindow.HookMode" xml:space="preserve">
     <value>Hook Mode</value>
   </data>
@@ -204,6 +207,9 @@
   </data>
   <data name="SettingWindow.Text.AppSetting" xml:space="preserve">
     <value>App Setting</value>
+  </data>
+  <data name="SettingWindow.Text.OCRSetting" xml:space="preserve">
+    <value>OCR Setting</value>
   </data>
   <data name="SettingWindow.Text.ProxySetting" xml:space="preserve">
     <value>Proxy Setting</value>

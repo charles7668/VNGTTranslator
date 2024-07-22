@@ -1,0 +1,95 @@
+﻿<Page x:Class="VNGTTranslator.SettingPages.OCRSetting"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:settingPages="clr-namespace:VNGTTranslator.SettingPages"
+      xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+      xmlns:p="clr-namespace:VNGTTranslator.Properties"
+      mc:Ignorable="d"
+      d:DataContext="{d:DesignInstance settingPages:OCRSetting}"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Background="White"
+      Title="OCR Setting" Unloaded="OCRSetting_OnUnloaded">
+    <StackPanel>
+        <StackPanel.Resources>
+            <Style TargetType="Label" BasedOn="{StaticResource {x:Type Label}}">
+                <Setter Property="FontSize" Value="15" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="BorderThickness" Value="0" />
+            </Style>
+        </StackPanel.Resources>
+        <Label HorizontalAlignment="Left">
+            <TextBlock Text="{x:Static p:Localization.OCRSettingPage_SelectOCREngine}" />
+        </Label>
+        <ItemsControl ItemsSource="{Binding OCRProviderList}">
+            <ItemsControl.Resources>
+                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Height" Value="32" />
+                    <Setter Property="Width" Value="32" />
+                    <Setter Property="FontSize" Value="16" />
+                    <Setter Property="Foreground" Value="Blue" />
+                </Style>
+            </ItemsControl.Resources>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="Black" BorderThickness="1">
+                        <StackPanel Orientation="Horizontal" Margin="10">
+                            <TextBlock
+                                MinWidth="120" MaxWidth="120"
+                                Text="{Binding ProviderName}" VerticalAlignment="Center"
+                                HorizontalAlignment="Center" />
+                            <Button Click="BtnProviderCheck_OnClick"
+                                    ToolTip="Use" Background="White">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                        <Setter Property="Foreground" Value="Red" />
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <fa:IconBlock Icon="Check" />
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsChecked}" Value="False">
+                                                <Setter Property="Foreground" Value="Blue" />
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <fa:IconBlock Icon="Close" />
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <Button ToolTip="Settings"
+                                    Click="BtnOCRProviderSetting_OnClick"
+                                    Background="White">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsSettingSupport}" Value="False">
+                                                <Setter Property="Visibility" Value="Hidden" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                <Button.Content>
+                                    <fa:IconBlock Icon="Cog" />
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+    </StackPanel>
+</Page>

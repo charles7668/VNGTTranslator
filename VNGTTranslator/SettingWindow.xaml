@@ -32,6 +32,8 @@
                              Selected="SideMenuItemProxySetting_OnSelected" />
             <hc:SideMenuItem Header="{x:Static p:Localization.SettingWindow_Text_TTSSetting}" FontSize="15"
                              Selected="SideMenuItemTTSSetting_OnSelected" />
+            <hc:SideMenuItem Header="{x:Static p:Localization.SettingWindow_Text_OCRSetting}" FontSize="15"
+                             Selected="SideMenuItemOCRSetting_OnSelected" />
         </hc:SideMenu>
         <Frame Grid.Column="1" Name="FramePage"
                Source="{Binding NavigateTo}"
