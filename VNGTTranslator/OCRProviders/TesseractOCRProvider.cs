@@ -138,8 +138,16 @@ namespace VNGTTranslator.OCRProviders
                 return default;
             }
 
-            T? result = ((JsonElement)obj).Deserialize<T>();
-            return result;
+            try
+            {
+                if (obj is JsonElement element)
+                    return element.Deserialize<T>();
+                return (T)obj;
+            }
+            catch (Exception)
+            {
+                return default;
+            }
         }
 
         private async Task SetSettingItemAsync(string key, object value)
