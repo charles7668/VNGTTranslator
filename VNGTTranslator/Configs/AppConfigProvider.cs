@@ -30,15 +30,7 @@ namespace VNGTTranslator.Configs
                     _appConfig = new AppConfig();
                 }
 
-                _translateProviderConfigCache = new MemoryCache(new MemoryCacheOptions
-                {
-                    SizeLimit = 20
-                });
-                _ttsProviderConfigCache = new MemoryCache(new MemoryCacheOptions
-                {
-                    SizeLimit = 20
-                });
-                _ocrProviderConfigCache = new MemoryCache(new MemoryCacheOptions
+                _memoryCache = new MemoryCache(new MemoryCacheOptions
                 {
                     SizeLimit = 20
                 });
@@ -46,9 +38,7 @@ namespace VNGTTranslator.Configs
             else
             {
                 _appConfig = new AppConfig();
-                _translateProviderConfigCache = new MemoryCache(new MemoryCacheOptions());
-                _ttsProviderConfigCache = new MemoryCache(new MemoryCacheOptions());
-                _ocrProviderConfigCache = new MemoryCache(new MemoryCacheOptions());
+                _memoryCache = new MemoryCache(new MemoryCacheOptions());
             }
 
             _appConfigPath = appConfigPath;
@@ -57,10 +47,8 @@ namespace VNGTTranslator.Configs
         private readonly AppConfig _appConfig;
 
         private readonly string _appConfigPath;
-        private readonly IMemoryCache _ocrProviderConfigCache;
 
-        private readonly IMemoryCache _translateProviderConfigCache;
-        private readonly IMemoryCache _ttsProviderConfigCache;
+        private readonly IMemoryCache _memoryCache;
 
         public AppConfig GetAppConfig()
         {
@@ -69,7 +57,8 @@ namespace VNGTTranslator.Configs
 
         public Dictionary<string, object> GetTranslatorProviderConfig(string providerName)
         {
-            if (_translateProviderConfigCache.TryGetValue(providerName, out Dictionary<string, object>? config))
+            string cacheKey = $"translator:{providerName}";
+            if (_memoryCache.TryGetValue(cacheKey, out Dictionary<string, object>? config))
             {
                 return config!;
             }
@@ -90,7 +79,7 @@ namespace VNGTTranslator.Configs
             config = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonString);
             if (config == null)
                 return new Dictionary<string, object>();
-            _translateProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions
+            _memoryCache.Set(cacheKey, config, new MemoryCacheEntryOptions
             {
                 Size = 1
             });
@@ -100,9 +89,10 @@ namespace VNGTTranslator.Configs
         public async Task<Result> SaveTranslatorProviderConfigAsync(string providerName,
             Dictionary<string, object> config)
         {
+            string cacheKey = $"translator:{providerName}";
             if (string.IsNullOrEmpty(_appConfigPath))
             {
-                _translateProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions
+                _memoryCache.Set(cacheKey, config, new MemoryCacheEntryOptions
                 {
                     Size = 1
                 });
@@ -116,7 +106,7 @@ namespace VNGTTranslator.Configs
                     string configFile = Path.Combine(configFolder, $"{providerName}.json");
                     string writeString = JsonSerializer.Serialize(config);
                     await File.WriteAllTextAsync(configFile, writeString);
-                    _translateProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions
+                    _memoryCache.Set(cacheKey, config, new MemoryCacheEntryOptions
                     {
                         Size = 1
                     });
@@ -133,8 +123,8 @@ namespace VNGTTranslator.Configs
         public (TTSCommonSetting comonSetting, Dictionary<string, object> otherSettings) GetTTSProviderConfig(
             string providerName)
         {
-            if (_ttsProviderConfigCache.TryGetValue(providerName,
-                    out (TTSCommonSetting, Dictionary<string, object>) config))
+            string cacheKey = $"tts:{providerName}";
+            if (_memoryCache.TryGetValue(cacheKey, out (TTSCommonSetting, Dictionary<string, object>) config))
             {
                 return config;
             }
@@ -156,7 +146,7 @@ namespace VNGTTranslator.Configs
                 return (new TTSCommonSetting(), new Dictionary<string, object>());
             config = (deserialize[0].Deserialize<TTSCommonSetting>() ?? new TTSCommonSetting(),
                 deserialize[1].Deserialize<Dictionary<string, object>>() ?? []);
-            _ttsProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions
+            _memoryCache.Set(cacheKey, config, new MemoryCacheEntryOptions
             {
                 Size = 1
             });
@@ -166,11 +156,12 @@ namespace VNGTTranslator.Configs
         public async Task<Result> SaveTTSProviderConfigAsync(string providerName, TTSCommonSetting commonSetting,
             Dictionary<string, object>? otherSettings = null)
         {
+            string cacheKey = $"tts:{providerName}";
             (TTSCommonSetting commonSetting, Dictionary<string, object> otherSettings) config = (commonSetting,
                 otherSettings ?? []);
             if (string.IsNullOrEmpty(_appConfigPath))
             {
-                _ttsProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions
+                _memoryCache.Set(cacheKey, config, new MemoryCacheEntryOptions
                 {
                     Size = 1
                 });
@@ -190,7 +181,7 @@ namespace VNGTTranslator.Configs
                     };
                     string writeString = JsonSerializer.Serialize(jArray);
                     await File.WriteAllTextAsync(configFile, writeString);
-                    _ttsProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions
+                    _memoryCache.Set(cacheKey, config, new MemoryCacheEntryOptions
                     {
                         Size = 1
                     });
@@ -206,7 +197,8 @@ namespace VNGTTranslator.Configs
 
         public async Task<Dictionary<string, object>> GetOCRProviderConfigAsync(string providerName)
         {
-            if (_ocrProviderConfigCache.TryGetValue(providerName,
+            string cacheKey = $"ocr:{providerName}";
+            if (_memoryCache.TryGetValue(cacheKey,
                     out Dictionary<string, object>? config) && config != null)
             {
                 return config;
@@ -228,7 +220,7 @@ namespace VNGTTranslator.Configs
                 deserialize = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonString);
             if (deserialize == null)
                 return new Dictionary<string, object>();
-            _ocrProviderConfigCache.Set(providerName, deserialize, new MemoryCacheEntryOptions
+            _memoryCache.Set(cacheKey, deserialize, new MemoryCacheEntryOptions
             {
                 Size = 1
             });
@@ -237,9 +229,10 @@ namespace VNGTTranslator.Configs
 
         public async Task<Result> SaveOCRProviderConfigAsync(string providerName, Dictionary<string, object> config)
         {
+            string cacheKey = $"ocr:{providerName}";
             if (string.IsNullOrEmpty(_appConfigPath))
             {
-                _ocrProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions
+                _memoryCache.Set(cacheKey, config, new MemoryCacheEntryOptions
                 {
                     Size = 1
                 });
@@ -253,7 +246,7 @@ namespace VNGTTranslator.Configs
                     string configFile = Path.Combine(configFolder, $"{providerName}.json");
                     string writeString = JsonSerializer.Serialize(config);
                     await File.WriteAllTextAsync(configFile, writeString);
-                    _ocrProviderConfigCache.Set(providerName, config, new MemoryCacheEntryOptions
+                    _memoryCache.Set(cacheKey, config, new MemoryCacheEntryOptions
                     {
                         Size = 1
                     });
