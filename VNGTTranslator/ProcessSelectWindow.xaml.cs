@@ -15,6 +15,7 @@ using VNGTTranslator.Models;
 using VNGTTranslator.OCRProviders;
 using Win32ApiLibrary;
 using Windows.System;
+using Localization = VNGTTranslator.Properties.Localization;
 using MessageBox = System.Windows.MessageBox;
 using Point = System.Windows.Point;
 
@@ -34,6 +35,8 @@ namespace VNGTTranslator
             _selectedHwnd = Program.OCRSetting.WinHandle;
             _selectedOCRLanguage = Program.OCRSetting.OCRLang;
             _selectedPreProcessFunc = Program.OCRSetting.PreProcessFunc;
+            UsedOCREngine = Program.ServiceProvider.GetRequiredService<IAppConfigProvider>().GetAppConfig()
+                .UseOCRProvider;
             DataContext = this;
         }
 
@@ -52,6 +55,8 @@ namespace VNGTTranslator
         private ImagePreProcessFunction _selectedPreProcessFunc;
 
         private string? _selectedProcess;
+
+        public string UsedOCREngine { get; }
 
         public string? SelectedOCRLanguage
         {
@@ -87,7 +92,7 @@ namespace VNGTTranslator
 
         public string DisplayCurrentOcrTarget
         {
-            get => Properties.Localization.ProcessSelectWindow_OCRMode_TargetWindow + ": " + _currentOCRTargetWindow;
+            get => Localization.ProcessSelectWindow_OCRMode_TargetWindow + ": " + _currentOCRTargetWindow;
             private set => SetField(ref _currentOCRTargetWindow, value);
         }
 
