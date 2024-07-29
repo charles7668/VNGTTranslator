@@ -3,6 +3,7 @@ using System.IO;
 using System.Text.Json;
 using VNGTTranslator.Helper;
 using VNGTTranslator.Models;
+using Windows.ApplicationModel;
 
 namespace VNGTTranslator.Configs
 {
@@ -118,8 +119,16 @@ namespace VNGTTranslator.Configs
             if (!File.Exists(configFile))
                 return [];
             string jsonString = await File.ReadAllTextAsync(configFile);
-            Dictionary<string, object>?
+            Dictionary<string, object>? deserialize = null;
+            try
+            {
                 deserialize = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonString);
+            }
+            catch (Exception)
+            {
+                // ignore
+            }
+
             deserialize ??= [];
             _memoryCache.Set(cacheKey, deserialize, new MemoryCacheEntryOptions
             {
