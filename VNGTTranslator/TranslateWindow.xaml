@@ -180,7 +180,8 @@
         </Grid>
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Auto">
-            <StackPanel Margin="10" Orientation="Vertical" CanVerticallyScroll="True">
+            <StackPanel Margin="10" Orientation="Vertical" CanVerticallyScroll="True"
+                        MaxWidth="{Binding Width , ElementName=TranslatorWindow}">
                 <hc:OutlineText Text="{Binding SourceText , Mode=OneWay}"
                                 d:Text="Wait source text"
                                 d:Fill="White"
