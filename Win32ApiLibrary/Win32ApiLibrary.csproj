@@ -6,6 +6,7 @@
 		<UseWindowsForms>true</UseWindowsForms>
 		<UseWin32>true</UseWin32>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<Platforms>AnyCPU;x64;x86</Platforms>
 	</PropertyGroup>
 
 	<ItemGroup>
