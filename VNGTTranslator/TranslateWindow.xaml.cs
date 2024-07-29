@@ -1,8 +1,10 @@
 ﻿using HandyControl.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Management;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
@@ -112,6 +114,32 @@ namespace VNGTTranslator
             {
                 _sourceTextColor = ((SolidColorBrush)value).Color;
                 OnPropertyChanged();
+            }
+        }
+
+        public static string Version
+        {
+            get
+            {
+                Version? version = Assembly.GetExecutingAssembly().GetName().Version;
+                if (version == null)
+                    return "Version 0.0.0.0";
+                return $"Version {version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
+            }
+        }
+
+        public string CurrentProcess
+        {
+            get
+            {
+                if (Program.Mode == Mode.OCR_MODE)
+                    return "OCR Mode";
+                if (Program.PID == 0)
+                {
+                    return "Process not set yet.";
+                }
+
+                return "Hooked : " + Process.GetProcessById((int)Program.PID).ProcessName;
             }
         }
 
@@ -289,6 +317,9 @@ namespace VNGTTranslator
                 _ocrRefreshTimer?.Dispose();
                 _ocrRefreshTimer = null;
             }
+
+            OnPropertyChanged(nameof(CurrentProcess));
+
             Topmost = onTopBackup;
         }
 

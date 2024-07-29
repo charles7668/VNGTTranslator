@@ -13,6 +13,7 @@
         Title="TranslateWindow"
         ResizeMode="NoResize"
         Background="Black"
+        x:Name="TranslatorWindow"
         d:DataContext="{d:DesignInstance Type=vngtTranslator:TranslateWindow , IsDesignTimeCreatable=True}"
         MinHeight="32" Height="450" Width="800" MinWidth="380">
     <Window.BorderBrush>
@@ -25,6 +26,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Height="32">
             <Grid.Resources>
@@ -218,5 +220,13 @@
                 </ItemsControl>
             </StackPanel>
         </ScrollViewer>
+        <StatusBar Grid.Row="2" Background="{Binding Background , ElementName=TranslatorWindow}"
+                   Margin="0" Padding="0">
+            <StatusBarItem Content="{Binding CurrentProcess , Mode=OneWay}" Foreground="White" />
+            <Separator HorizontalAlignment="Stretch"
+                       Visibility="Hidden" />
+            <StatusBarItem HorizontalAlignment="Right"
+                           Content="{Binding vngtTranslator:TranslateWindow.Version , Mode=OneTime}" Foreground="White" />
+        </StatusBar>
     </Grid>
 </Window>
