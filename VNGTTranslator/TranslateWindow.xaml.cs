@@ -123,8 +123,8 @@ namespace VNGTTranslator
             {
                 Version? version = Assembly.GetExecutingAssembly().GetName().Version;
                 if (version == null)
-                    return "Version 0.0.0.0";
-                return $"Version {version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
+                    return $"{Localization.Version} : 0.0.0.0";
+                return $"{Localization.Version} : {version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
             }
         }
 

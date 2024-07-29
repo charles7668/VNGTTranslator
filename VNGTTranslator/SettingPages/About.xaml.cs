@@ -18,8 +18,16 @@ namespace VNGTTranslator.SettingPages
             DataContext = this;
         }
 
-        public string VersionText =>
-            $"{Localization.AboutPage_Text_Version}: {Assembly.GetExecutingAssembly().GetName().Version}";
+        public static string VersionText
+        {
+            get
+            {
+                Version? version = Assembly.GetExecutingAssembly().GetName().Version;
+                return version is null
+                    ? $"{Localization.Version}: 0.0.0.0"
+                    : $"{Localization.Version}: {version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
+            }
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

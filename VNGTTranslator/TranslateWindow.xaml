@@ -226,7 +226,7 @@
             <Separator HorizontalAlignment="Stretch"
                        Visibility="Hidden" />
             <StatusBarItem HorizontalAlignment="Right"
-                           Content="{Binding vngtTranslator:TranslateWindow.Version , Mode=OneTime}" Foreground="White" />
+                           Content="{Binding Version , Mode=OneTime}" Foreground="White" />
         </StatusBar>
     </Grid>
 </Window>

@@ -103,7 +103,7 @@
   <data name="AboutPage.Text.FeatureAndIssue" xml:space="preserve">
     <value>Feature Request or Issue</value>
   </data>
-  <data name="AboutPage.Text.Version" xml:space="preserve">
+  <data name="Version" xml:space="preserve">
     <value>Version</value>
   </data>
   <data name="AboutPage.Text.WebSite" xml:space="preserve">

@@ -79,15 +79,6 @@ namespace VNGTTranslator.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 Version 的當地語系化字串。
-        /// </summary>
-        public static string AboutPage_Text_Version {
-            get {
-                return ResourceManager.GetString("AboutPage.Text.Version", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查詢類似 Website 的當地語系化字串。
         /// </summary>
         public static string AboutPage_Text_WebSite {
@@ -759,6 +750,15 @@ namespace VNGTTranslator.Properties {
         public static string TTSSettingPage_Text_Volume {
             get {
                 return ResourceManager.GetString("TTSSettingPage.Text.Volume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 Version 的當地語系化字串。
+        /// </summary>
+        public static string Version {
+            get {
+                return ResourceManager.GetString("Version", resourceCulture);
             }
         }
     }

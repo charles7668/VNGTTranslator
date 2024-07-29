@@ -21,7 +21,7 @@
         <TextBlock Text="{x:Static p:Localization.AboutPage_Text_AboutProgram}" FontSize="25"
                    HorizontalAlignment="Left" />
         <TextBlock Style="{StaticResource InfoTextBlockStyle}"
-                   d:Text="Version: 1.0.0"
+                   d:Text="Version: 1.0.0.0"
                    Text="{Binding VersionText}" />
         <TextBlock Style="{StaticResource InfoTextBlockStyle}">
             <TextBlock Text="{x:Static p:Localization.AboutPage_Text_WebSite}" />
