@@ -39,6 +39,9 @@ namespace VNGTTranslator.Configs
                 TranslateWindowColor = TranslateWindowColor,
                 SourceTextStyle = SourceTextStyle,
                 TranslateTextStyles = new Dictionary<string, DisplayTextStyle>(TranslateTextStyles),
+                TranslateInterval = TranslateInterval,
+                TargetLanguage = TargetLanguage,
+                SourceLanguage = SourceLanguage,
                 UsedTranslateProviderSet = [..UsedTranslateProviderSet],
                 MaxTranslateWordCount = MaxTranslateWordCount,
                 IsUseProxy = IsUseProxy,
@@ -57,6 +60,9 @@ namespace VNGTTranslator.Configs
             TranslateWindowColor = appConfig.TranslateWindowColor;
             SourceTextStyle = appConfig.SourceTextStyle;
             TranslateTextStyles = new Dictionary<string, DisplayTextStyle>(appConfig.TranslateTextStyles);
+            TranslateInterval = appConfig.TranslateInterval;
+            TargetLanguage = appConfig.TargetLanguage;
+            SourceLanguage = appConfig.SourceLanguage;
             UsedTranslateProviderSet = [..appConfig.UsedTranslateProviderSet];
             MaxTranslateWordCount = appConfig.MaxTranslateWordCount;
             IsUseProxy = appConfig.IsUseProxy;
