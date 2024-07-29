@@ -5,6 +5,19 @@
 A visual novel game translator.
 ![cover](Docs/cover.png)
 
+## Features
+
+- Supports `hook` and `ocr` mode
+- Can integrate with [VNGT](https://github.com/charles7668/VNGT) GameManager
+- Supports text-to-voice
+- Supports using multiple translation sources at same time
+
+- [VNGTTranslator](#vngttranslator)
+  - [How to Use](#how-to-use)
+    - [Hook Mode](#hook-mode)
+    - [OCR Mode](#ocr-mode)
+  - [How to Build](#how-to-build)
+
 ## How to Use
 
 - Click the `Select Process` button.
@@ -30,3 +43,7 @@ A visual novel game translator.
 - In `Use Screen` mode, you cannot change the window position.
 - Select the source language.
 - Click `Save`.
+
+## How to Build
+
+Execute `build.bat` and the output file will be in the `bin` folder.
