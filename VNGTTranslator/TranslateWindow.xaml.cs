@@ -99,6 +99,8 @@ namespace VNGTTranslator
 
         private List<TranslateProviderDataContext> _useTranslateProviderDataContexts = [];
 
+        private Bitmap? _prevOcrImage;
+
         public bool IsHookMode => Program.Mode == Mode.HOOK_MODE;
 
         public Effect? SourceTextEffect
@@ -362,6 +364,9 @@ namespace VNGTTranslator
                 return;
             }
 
+            if (ImageHelper.CompareImage(image, _prevOcrImage))
+                return;
+
             IOCRProvider? ocrProvider = _ocrProviderFactory.GetProvider(_appConfig.UseOCRProvider);
             if (ocrProvider == null)
             {
@@ -385,6 +390,7 @@ namespace VNGTTranslator
             }
 
             SourceText = recognizeTextResult.Value ?? "";
+            _prevOcrImage = image;
             await TranslateAsync();
             _ = AloudText(SourceText);
         }

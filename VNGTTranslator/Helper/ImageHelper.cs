@@ -157,5 +157,55 @@ namespace VNGTTranslator.Helper
 
             return Binarize(image, threshold);
         }
+
+        public static unsafe bool CompareImage(Bitmap? bmp1, Bitmap? bmp2)
+        {
+            if (bmp1 == null || bmp2 == null)
+                return false;
+            if (bmp1.Width != bmp2.Width || bmp1.Height != bmp2.Height)
+            {
+                return false;
+            }
+
+            BitmapData bmpData1 = bmp1.LockBits(new Rectangle(0, 0, bmp1.Width, bmp1.Height),
+                ImageLockMode.ReadOnly, bmp1.PixelFormat);
+            BitmapData bmpData2 = bmp2.LockBits(new Rectangle(0, 0, bmp2.Width, bmp2.Height),
+                ImageLockMode.ReadOnly, bmp2.PixelFormat);
+
+            try
+            {
+                int bytesPerPixel = Image.GetPixelFormatSize(bmp1.PixelFormat) / 8;
+                int heightInPixels = bmp1.Height;
+                int widthInBytes = bmp1.Width * bytesPerPixel;
+
+                byte* ptr1 = (byte*)bmpData1.Scan0;
+                byte* ptr2 = (byte*)bmpData2.Scan0;
+
+                for (int y = 0; y < heightInPixels; y++)
+                {
+                    byte* row1 = ptr1 + (y * bmpData1.Stride);
+                    byte* row2 = ptr2 + (y * bmpData2.Stride);
+
+                    for (int x = 0; x < widthInBytes; x++)
+                    {
+                        if (row1[x] != row2[x])
+                        {
+                            return false;
+                        }
+                    }
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+            finally
+            {
+                bmp1.UnlockBits(bmpData1);
+                bmp2.UnlockBits(bmpData2);
+            }
+        }
     }
 }
