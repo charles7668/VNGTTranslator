@@ -101,6 +101,12 @@
                         <fa:IconBlock Icon="Repeat" />
                     </Button.Content>
                 </Button>
+                <Button Click="BtnCopy_OnClick"
+                        ToolTip="Copy">
+                    <Button.Content>
+                        <fa:IconBlock Icon="Copy" />
+                    </Button.Content>
+                </Button>
                 <Button Click="BtnShowSourceText_OnClick"
                         ToolTip="{x:Static p:Localization.TranslateWindow_Text_ShowSourceText}">
                     <Button.Style>

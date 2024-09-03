@@ -83,6 +83,8 @@ namespace VNGTTranslator
         private bool _pauseState;
 
         private DateTime _previousTranslateTime = new(2000, 01, 01);
+
+        private Bitmap? _prevOcrImage;
         private CancellationTokenSource _processMonitorCancellationTokenSource = new();
 
         private Thread? _processMonitorThread;
@@ -98,8 +100,6 @@ namespace VNGTTranslator
         private ITTSProvider? _ttsProvider;
 
         private List<TranslateProviderDataContext> _useTranslateProviderDataContexts = [];
-
-        private Bitmap? _prevOcrImage;
 
         public bool IsHookMode => Program.Mode == Mode.HOOK_MODE;
 
@@ -392,7 +392,8 @@ namespace VNGTTranslator
             SourceText = recognizeTextResult.Value ?? "";
             _prevOcrImage = image;
             await TranslateAsync();
-            _ = AloudText(SourceText);
+            if (_appConfig.AutoPlayTTS)
+                _ = AloudText(SourceText);
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -603,6 +604,15 @@ namespace VNGTTranslator
             await _ttsProvider.SpeakAsync(text);
         }
 
+        private void BtnCopy_OnClick(object sender, RoutedEventArgs e)
+        {
+            string writeText = "Source Text : \n" + SourceText + "\n\n";
+            writeText = UseTranslateProviderDataContexts.Aggregate(writeText,
+                (current, context) => current + context.ProviderName + " : \n" + context.TranslatedText + "\n\n");
+
+            Clipboard.SetText(writeText);
+        }
+
         public class TranslateProviderDataContext : INotifyPropertyChanged
         {
             public TranslateProviderDataContext(ITranslateProvider provider, AppConfig appConfig)
@@ -622,6 +632,8 @@ namespace VNGTTranslator
             private string _translatedText = string.Empty;
 
             private ITranslateProvider Provider { get; }
+            
+            public string ProviderName => Provider.ProviderName;
 
             public Brush ProviderTextColor => new SolidColorBrush(_providerStyle.TextColor);
 
