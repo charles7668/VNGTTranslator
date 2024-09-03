@@ -30,6 +30,7 @@ namespace VNGTTranslator.Configs
         public string ProxyAddress { get; set; } = "";
         public string ProxyPort { get; set; } = "";
         public string? UseTTSProvider { get; set; }
+        public bool AutoPlayTTS { get; set; }
         public string UseOCRProvider { get; set; } = "WindowOCR";
 
         public AppConfig Clone()
@@ -49,6 +50,7 @@ namespace VNGTTranslator.Configs
                 ProxyAddress = ProxyAddress,
                 ProxyPort = ProxyPort,
                 UseTTSProvider = UseTTSProvider,
+                AutoPlayTTS = AutoPlayTTS,
                 UseOCRProvider = UseOCRProvider,
                 AppDisplayLanguage = AppDisplayLanguage
             };
@@ -70,6 +72,7 @@ namespace VNGTTranslator.Configs
             ProxyAddress = appConfig.ProxyAddress;
             ProxyPort = appConfig.ProxyPort;
             UseTTSProvider = appConfig.UseTTSProvider;
+            AutoPlayTTS = appConfig.AutoPlayTTS;
             UseOCRProvider = appConfig.UseOCRProvider;
             AppDisplayLanguage = appConfig.AppDisplayLanguage;
         }

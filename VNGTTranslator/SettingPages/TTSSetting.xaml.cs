@@ -89,6 +89,16 @@ namespace VNGTTranslator.SettingPages
             }
         }
 
+        public bool AutoPlayTTS
+        {
+            get => _appConfig.AutoPlayTTS;
+            set
+            {
+                _appConfig.AutoPlayTTS = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string SelectedVoice
         {
             get => _previousSelectedProvider == null! ? "" : _previousSelectedProvider.Provider.SelectedVoice;

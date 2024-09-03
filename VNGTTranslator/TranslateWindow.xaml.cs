@@ -266,8 +266,7 @@ namespace VNGTTranslator
                 return;
             }
 
-            _ttsProvider.StopSpeak();
-            _ttsProvider.SpeakAsync(SourceText);
+            _ = AloudText(SourceText);
         }
 
         private async void BtnReTranslate_OnClick(object sender, RoutedEventArgs e)
@@ -387,6 +386,7 @@ namespace VNGTTranslator
 
             SourceText = recognizeTextResult.Value ?? "";
             await TranslateAsync();
+            _ = AloudText(SourceText);
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -573,9 +573,13 @@ namespace VNGTTranslator
             _history.AppendLine("----------------------"); // line separator
         }
 
-        private async void TranslateTimerCallback(object? state)
+        private void TranslateTimerCallback(object? state)
         {
-            await TranslateAsync();
+            TranslateAsync().ContinueWith(async _ =>
+            {
+                if (_appConfig.AutoPlayTTS)
+                    await AloudText(SourceText).ConfigureAwait(false);
+            });
         }
 
         private void UpdateTTSProvider()
@@ -583,6 +587,14 @@ namespace VNGTTranslator
             ITTSProvider? provider = _ttsProviderFactory.GetProvider(_appConfig.UseTTSProvider ?? "")
                                      ?? _ttsProviderFactory.GetProvider("WindowsTTS");
             _ttsProvider = provider;
+        }
+
+        private async Task AloudText(string text)
+        {
+            if (_ttsProvider == null)
+                return;
+            _ttsProvider.StopSpeak();
+            await _ttsProvider.SpeakAsync(text);
         }
 
         public class TranslateProviderDataContext : INotifyPropertyChanged
