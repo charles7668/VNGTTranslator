@@ -42,3 +42,5 @@ Windows.Win32.UI.WindowsAndMessaging.GetDesktopWindow
 Windows.Win32.UI.WindowsAndMessaging.GetWindowRect
 Windows.Win32.UI.WindowsAndMessaging.PrivateExtractIcons
 Windows.Win32.UI.WindowsAndMessaging.ShowWindow
+
+PrintWindow
