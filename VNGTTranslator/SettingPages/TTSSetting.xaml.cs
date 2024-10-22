@@ -129,9 +129,9 @@ namespace VNGTTranslator.SettingPages
             if (radioButton.DataContext is not TTSProviderDataContext providerDataContext)
                 return;
             await _previousSelectedProvider.Provider.StoreSettingsAsync();
-            ProviderVoices = providerDataContext.ProviderVoices;
-            SelectedVoice = providerDataContext.Provider.SelectedVoice;
             _previousSelectedProvider = providerDataContext;
+            SelectedVoice = providerDataContext.Provider.SelectedVoice;
+            ProviderVoices = providerDataContext.ProviderVoices;
             _appConfig.UseTTSProvider = providerDataContext.ProviderName;
         }
 

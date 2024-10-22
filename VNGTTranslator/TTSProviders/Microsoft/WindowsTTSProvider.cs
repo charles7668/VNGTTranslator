@@ -102,6 +102,8 @@ namespace VNGTTranslator.TTSProviders.Microsoft
 
         public Result SetVoice(string voiceName)
         {
+            if (string.IsNullOrWhiteSpace(voiceName))
+                return Result.Success();
             if (!_installedVoices.TryGetValue(voiceName, out InstalledVoice? installedVoice))
                 return Result.Fail($"{voiceName} not exist");
             _speechSynthesizer.SelectVoice(installedVoice.VoiceInfo.Name);
